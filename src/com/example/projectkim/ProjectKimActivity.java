@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 
 public class ProjectKimActivity extends Activity
 {
@@ -13,6 +14,7 @@ public class ProjectKimActivity extends Activity
 		super.onCreate(savedInstanceState);
 		
 		// Display splash screen.
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splashscreen);
 		
 		// Start new game thread.
