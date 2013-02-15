@@ -11,18 +11,20 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int btn_credits=0x7f020000;
-        public static final int btn_credits_press=0x7f020001;
-        public static final int btn_settings=0x7f020002;
-        public static final int btn_settings_press=0x7f020003;
-        public static final int btn_tutorial=0x7f020004;
-        public static final int btn_tutorial_press=0x7f020005;
-        public static final int exitselector=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int mainmenu=0x7f020008;
-        public static final int settingsselector=0x7f020009;
-        public static final int splash=0x7f02000a;
-        public static final int startselector=0x7f02000b;
+        public static final int background=0x7f020000;
+        public static final int btn_credits=0x7f020001;
+        public static final int btn_credits_press=0x7f020002;
+        public static final int btn_settings=0x7f020003;
+        public static final int btn_settings_press=0x7f020004;
+        public static final int btn_tutorial=0x7f020005;
+        public static final int btn_tutorial_press=0x7f020006;
+        public static final int exitselector=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int mainmenu=0x7f020009;
+        public static final int settingsselector=0x7f02000a;
+        public static final int splash=0x7f02000b;
+        public static final int spritesheet_treasurehunter_temp=0x7f02000c;
+        public static final int startselector=0x7f02000d;
     }
     public static final class id {
         public static final int btnExit=0x7f080004;

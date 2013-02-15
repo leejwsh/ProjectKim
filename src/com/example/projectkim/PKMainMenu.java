@@ -53,7 +53,9 @@ public class PKMainMenu extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Start game.
+				// Start game.
+				Intent game = new Intent(getApplicationContext(), PKGame.class);
+				PKMainMenu.this.startActivity(game);
 			}
 		});
 		
@@ -86,9 +88,8 @@ public class PKMainMenu extends Activity
 	@Override
 	protected void onPause()
 	{
-		System.out.println("paused");
 		super.onPause();
-		PKEngine.player.pause();
+		if (PKEngine.player != null) PKEngine.player.pause();
 	}
 
 	@Override
