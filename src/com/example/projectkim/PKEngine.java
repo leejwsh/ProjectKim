@@ -23,12 +23,13 @@ public class PKEngine
 	public static final boolean LOOP_BACKGROUND_MUSIC = true;
 	public static Context context;
 	
-	// Constants for OpenGL.
+	// Constants for images.
 	public static final int BACKGROUND_LAYER_ONE = R.drawable.background;
-	public static float SCROLL_BACKGROUND_1 = 0.002f;
+	public static final int POV_MAP = R.drawable.povmap;
+	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
+	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.167f, 0.0f, 0.167f, 0.167f, 0.0f, 0.167f };
 	
 	// Constants for player sprite.
-	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
 	public static final int PLAYER_STATIONARY = 5;
 	public static final int PLAYER_LEFT = 4;
 	public static final int PLAYER_RIGHT = 6;

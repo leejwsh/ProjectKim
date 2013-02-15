@@ -13,7 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
-public class PKTreasureHunter
+public class PKImage
 {
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer textureBuffer;
@@ -26,15 +26,20 @@ public class PKTreasureHunter
 								 1.0f, 1.0f, 0.0f,
 								 0.0f, 1.0f, 0.0f };
 	
-	private float texture[] = { 0.0f, 0.0f,
-								0.167f, 0.0f,
-								0.167f, 0.167f,
-								0.0f, 0.167f };
+	private static float texture[] = { 0.0f, 0.0f,
+									   1.0f, 0.0f,
+									   1.0f, 1.0f,
+									   0.0f, 1.0f };
 	
 	private byte indices[] = { 0, 1, 2,
 							   0, 2, 3 };
 	
-	public PKTreasureHunter()
+	public PKImage()
+	{
+		this(texture);
+	}
+	
+	public PKImage(float[] texture)
 	{
 		// Populate buffers.
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -54,7 +59,7 @@ public class PKTreasureHunter
 		indexBuffer.position(0);
 	}
 	
-	public void loadTexture(GL10 gl, int texture, Context context)
+	public void loadTexture(GL10 gl, int texture, Context context, int texWrap)
 	{
 		// Load image into bitmap stream.
 		InputStream imagestream = context.getResources().openRawResource(texture);
@@ -86,10 +91,8 @@ public class PKTreasureHunter
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-		//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, texWrap);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, texWrap);
 		
 		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 		

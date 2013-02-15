@@ -7,10 +7,14 @@ import android.opengl.GLSurfaceView.Renderer;
 
 public class PKGameRenderer implements Renderer
 {
-	private PKBackground background = new PKBackground();
+	//private PKBackground background = new PKBackground();
+	private PKImage background = new PKImage();
 	
-	private PKTreasureHunter player = new PKTreasureHunter();
+	//private PKTreasureHunter player = new PKTreasureHunter();
+	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
 	//private int playerWalkFrames = 0;
+	
+	private PKImage povMap = new PKImage();
 	
 	private long loopStart = 0;
 	private long loopEnd = 0;
@@ -34,7 +38,7 @@ public class PKGameRenderer implements Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		// Draw background.
-		drawBackground(gl);
+		//drawBackground(gl);
 		
 		// Draw player.
 		drawPlayer(gl);
@@ -43,7 +47,7 @@ public class PKGameRenderer implements Renderer
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		// Check loop run time.
 		loopEnd = System.currentTimeMillis();
@@ -73,13 +77,13 @@ public class PKGameRenderer implements Renderer
 		
 		// Blending settings.
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		// Load background texture.
-		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context);
-		
+		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
+				
 		// Load player texture.
-		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context);
+		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 	}
 	
 	private void drawBackground(GL10 gl)

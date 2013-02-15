@@ -11,7 +11,6 @@ public class PKGame extends Activity
 	private PKGameView gameView;
 	private DisplayMetrics displaymetrics;
 	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{

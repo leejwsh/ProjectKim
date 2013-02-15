@@ -21,10 +21,11 @@ public final class R {
         public static final int exitselector=0x7f020007;
         public static final int ic_launcher=0x7f020008;
         public static final int mainmenu=0x7f020009;
-        public static final int settingsselector=0x7f02000a;
-        public static final int splash=0x7f02000b;
-        public static final int spritesheet_treasurehunter_temp=0x7f02000c;
-        public static final int startselector=0x7f02000d;
+        public static final int povmap=0x7f02000a;
+        public static final int settingsselector=0x7f02000b;
+        public static final int splash=0x7f02000c;
+        public static final int spritesheet_treasurehunter_temp=0x7f02000d;
+        public static final int startselector=0x7f02000e;
     }
     public static final class id {
         public static final int btnExit=0x7f080004;
