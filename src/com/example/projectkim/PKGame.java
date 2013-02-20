@@ -9,7 +9,6 @@ import android.view.Window;
 public class PKGame extends Activity
 {
 	private PKGameView gameView;
-	private DisplayMetrics displaymetrics;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -21,9 +20,6 @@ public class PKGame extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(gameView);
 		gameView.setRenderer(renderer);
-		
-		displaymetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 	}
 	
 	@Override
@@ -47,8 +43,6 @@ public class PKGame extends Activity
 	{
 		float x = event.getX();
 		float y = event.getY();
-		//int height = displaymetrics.heightPixels;
-		//int width = displaymetrics.widthPixels;
 		
 		if (y < 100)
 		{

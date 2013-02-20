@@ -7,13 +7,15 @@ import android.opengl.GLSurfaceView.Renderer;
 
 public class PKGameRenderer implements Renderer
 {
-	//private PKBackground background = new PKBackground();
+	// Variables for background.
 	private PKImage background = new PKImage();
 	
-	//private PKTreasureHunter player = new PKTreasureHunter();
+	// Variables for player.
 	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
+	private int playerPosition = PKEngine.POV_MAP_WIDTH * PKEngine.POV_MAP_HEIGHT - 1;
 	//private int playerWalkFrames = 0;
 	
+	// Variables for PoV map.
 	private PKImage povMap = new PKImage();
 	
 	private long loopStart = 0;
@@ -37,13 +39,10 @@ public class PKGameRenderer implements Renderer
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		// Draw background.
+		// Draw stuff.
 		//drawBackground(gl);
-		
-		// Draw player.
+		drawPovMap(gl);
 		drawPlayer(gl);
-		
-		// TODO Draw rest of scene.
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -79,10 +78,9 @@ public class PKGameRenderer implements Renderer
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
-		// Load background texture.
+		// Load textures.
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
-				
-		// Load player texture.
+		povMap.loadTexture(gl, PKEngine.POV_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 	}
 	
@@ -141,6 +139,42 @@ public class PKGameRenderer implements Renderer
 		}
 		
 		player.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
+	}
+	
+	private void drawPovMap(GL10 gl)
+	{
+		// Draw PoV map.
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(0.0f, 0.25f * PKEngine.scrHeight / PKEngine.scrWidth, 0.0f);
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		switch (PKEngine.playerWalkAction)
+		{
+			case PKEngine.PLAYER_LEFT:
+				if (playerPosition % PKEngine.POV_MAP_WIDTH > 0)
+				{
+					// Not at left boundary.
+					// Move map one block to the right.
+				}
+				else
+				{
+					// At left boundary.
+					// Do nothing.
+				}
+				break;
+			default:
+				gl.glTranslatef(0.0f, 0.0f, 0.0f);
+				break;
+		}
+		
+		povMap.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}

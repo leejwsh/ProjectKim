@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.Window;
 
 public class ProjectKimActivity extends Activity
@@ -12,6 +13,12 @@ public class ProjectKimActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		// Get screen size of device.
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		PKEngine.scrHeight = displaymetrics.heightPixels;
+		PKEngine.scrWidth = displaymetrics.widthPixels;
 		
 		// Display splash screen.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

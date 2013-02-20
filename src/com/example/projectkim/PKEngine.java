@@ -3,6 +3,7 @@ package com.example.projectkim;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 public class PKEngine
@@ -23,19 +24,27 @@ public class PKEngine
 	public static final boolean LOOP_BACKGROUND_MUSIC = true;
 	public static Context context;
 	
-	// Constants for images.
+	// Constants for background.
 	public static final int BACKGROUND_LAYER_ONE = R.drawable.background;
+	
+	// Constants for map.
 	public static final int POV_MAP = R.drawable.povmap;
-	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
-	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.167f, 0.0f, 0.167f, 0.167f, 0.0f, 0.167f };
+	public static final int POV_MAP_WIDTH = 3;
+	public static final int POV_MAP_HEIGHT = 3;
 	
 	// Constants for player sprite.
+	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
+	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.167f, 0.0f, 0.167f, 0.167f, 0.0f, 0.167f };
 	public static final int PLAYER_STATIONARY = 5;
 	public static final int PLAYER_LEFT = 4;
 	public static final int PLAYER_RIGHT = 6;
 	public static final int PLAYER_UP = 8;
 	public static final int PLAYER_DOWN = 2;
 	public static final int PLAYER_FRAMES_BETWEEN_ANI = 12;
+	
+	// Variables for screen size.
+	public static int scrHeight;
+	public static int scrWidth;
 	
 	// Variables for audio.
 	public static MediaPlayer player;
