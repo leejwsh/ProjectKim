@@ -31,6 +31,10 @@ public class PKEngine
 	public static final int POV_MAP = R.drawable.povmap;
 	public static final int POV_MAP_WIDTH = 3;
 	public static final int POV_MAP_HEIGHT = 3;
+	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
+													3.0f / (POV_MAP_WIDTH + 2), 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
+													3.0f / (POV_MAP_WIDTH + 2), 1.0f,
+													0.0f, 1.0f };
 	
 	// Constants for player sprite.
 	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;

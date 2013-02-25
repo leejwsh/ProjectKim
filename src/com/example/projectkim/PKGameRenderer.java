@@ -12,11 +12,11 @@ public class PKGameRenderer implements Renderer
 	
 	// Variables for player.
 	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
-	private int playerPosition = PKEngine.POV_MAP_WIDTH * PKEngine.POV_MAP_HEIGHT - 1;
+	private int playerPosition = 0;
 	//private int playerWalkFrames = 0;
 	
 	// Variables for PoV map.
-	private PKImage povMap = new PKImage();
+	private PKImage povMap = new PKImage(PKEngine.POV_MAP_TEXTURE);
 	
 	private long loopStart = 0;
 	private long loopEnd = 0;
@@ -116,18 +116,42 @@ public class PKGameRenderer implements Renderer
 			case PKEngine.PLAYER_LEFT:
 				gl.glTranslatef(0.167f, 0.833f, 0.0f);
 				//playerWalkFrames++;
+				if (playerPosition % PKEngine.POV_MAP_WIDTH > 0)
+				{
+					// Not at left boundary.
+					// Move player one position to the left.
+					playerPosition -= 1;
+				}
 				break;
 			case PKEngine.PLAYER_RIGHT:
 				gl.glTranslatef(0.833f, 0.833f, 0.0f);
 				//playerWalkFrames++;
+				if (playerPosition % PKEngine.POV_MAP_WIDTH < PKEngine.POV_MAP_WIDTH - 1)
+				{
+					// Not at right boundary.
+					// Move player one position to the right.
+					playerPosition += 1;
+				}
 				break;
 			case PKEngine.PLAYER_UP:
 				gl.glTranslatef(0.5f, 0.667f, 0.0f);
 				//playerWalkFrames++;
+				if (playerPosition / PKEngine.POV_MAP_WIDTH > 0)
+				{
+					// Not at top boundary.
+					// Move player one position up.
+					playerPosition -= PKEngine.POV_MAP_WIDTH;
+				}
 				break;
 			case PKEngine.PLAYER_DOWN:
 				gl.glTranslatef(0.5f, 0.333f, 0.0f);
 				//playerWalkFrames++;
+				if (playerPosition / PKEngine.POV_MAP_WIDTH < PKEngine.POV_MAP_HEIGHT - 1)
+				{
+					// Not at bottom boundary.
+					// Move player one position down.
+					playerPosition += PKEngine.POV_MAP_WIDTH;
+				}
 				break;
 			case PKEngine.PLAYER_STATIONARY:
 				gl.glTranslatef(0.333f, 0.833f, 0.0f);
@@ -154,25 +178,9 @@ public class PKGameRenderer implements Renderer
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
-		
-		switch (PKEngine.playerWalkAction)
-		{
-			case PKEngine.PLAYER_LEFT:
-				if (playerPosition % PKEngine.POV_MAP_WIDTH > 0)
-				{
-					// Not at left boundary.
-					// Move map one block to the right.
-				}
-				else
-				{
-					// At left boundary.
-					// Do nothing.
-				}
-				break;
-			default:
-				gl.glTranslatef(0.0f, 0.0f, 0.0f);
-				break;
-		}
+		gl.glTranslatef(playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2),
+						playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2),
+						0.0f);
 		
 		povMap.draw(gl);
 		gl.glPopMatrix();
