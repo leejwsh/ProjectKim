@@ -38,13 +38,24 @@ public class PKEngine
 	// Constants for player sprite.
 	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
 	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.167f, 0.0f, 0.167f, 0.167f, 0.0f, 0.167f };
+	public static final float SPRITE_STATIONARY_1[] = { 0.333f, 0.833f };
+	public static final float SPRITE_STATIONARY_2[] = { 0.667f, 0.333f };
+	public static final float SPRITE_LEFT_1[] = { 0.167f, 0.5f };
+	public static final float SPRITE_LEFT_2[] = { 0.0f, 0.5f };
+	public static final float SPRITE_RIGHT_1[] = { 0.667f, 0.667f };
+	public static final float SPRITE_RIGHT_2[] = { 0.833f, 0.833f };
+	public static final float SPRITE_UP_1[] = { 0.5f, 0.667f };
+	public static final float SPRITE_UP_2[] = { 0.333f, 0.667f };
+	public static final float SPRITE_DOWN_1[] = { 0.0f, 0.333f };
+	public static final float SPRITE_DOWN_2[] = { 0.5f, 0.333f };
 	public static final int PLAYER_STATIONARY = 5;
 	public static final int PLAYER_LEFT = 4;
 	public static final int PLAYER_RIGHT = 6;
 	public static final int PLAYER_UP = 8;
 	public static final int PLAYER_DOWN = 2;
-	public static final int PLAYER_FRAMES_BETWEEN_ANI = 12;
-	public static final int ANIMATION_TIME = 1000;
+	public static final int SPRITE_TIME_BETWEEN_ANI = 250;
+	public static final int SPRITE_TIME_BETWEEN_STATIONARY_ANI = 1500;
+	public static final int TOTAL_ANIMATION_TIME = 1000;
 	
 	// Variables for screen size.
 	public static int scrHeight;
