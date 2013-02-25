@@ -3,7 +3,6 @@ package com.example.projectkim;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 public class PKEngine
@@ -45,6 +44,7 @@ public class PKEngine
 	public static final int PLAYER_UP = 8;
 	public static final int PLAYER_DOWN = 2;
 	public static final int PLAYER_FRAMES_BETWEEN_ANI = 12;
+	public static final int ANIMATION_TIME = 1000;
 	
 	// Variables for screen size.
 	public static int scrHeight;

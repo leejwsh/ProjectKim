@@ -1,5 +1,7 @@
 package com.example.projectkim;
 
+import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,11 +15,16 @@ public class PKGameRenderer implements Renderer
 	// Variables for player.
 	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
 	private int playerPosition = 0;
+	private ArrayList<Integer> playerNewPos = new ArrayList<Integer>();
 	//private int playerWalkFrames = 0;
 	
 	// Variables for PoV map.
 	private PKImage povMap = new PKImage(PKEngine.POV_MAP_TEXTURE);
+	private boolean animStart = false;
+	private float[] translateCoords = new float[2];
+	private int animRunTime = 0;
 	
+	// Variables for run time.
 	private long loopStart = 0;
 	private long loopEnd = 0;
 	private long loopRunTime = 0;
@@ -40,7 +47,7 @@ public class PKGameRenderer implements Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		// Draw stuff.
-		//drawBackground(gl);
+		drawBackground(gl);
 		drawPovMap(gl);
 		drawPlayer(gl);
 		
@@ -82,6 +89,11 @@ public class PKGameRenderer implements Renderer
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
 		povMap.loadTexture(gl, PKEngine.POV_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		
+		// Initialisation for player position.
+		playerNewPos.add(playerPosition);
+		translateCoords[0] = playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
+		translateCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
 	}
 	
 	private void drawBackground(GL10 gl)
@@ -105,8 +117,13 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glTranslatef(0.5f, 0.5f, 0.0f);
-		gl.glScalef(0.5f, 0.2f, 1.0f);
+		//gl.glTranslatef(0.5f, 0.5f, 0.0f);
+		//gl.glScalef(0.5f, 0.2f, 1.0f);
+		gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(1.5f, 4.0f * PKEngine.scrWidth / PKEngine.scrHeight, 0.0f);
+		
+		//gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		//gl.glTranslatef(0.0f, 0.25f * PKEngine.scrHeight / PKEngine.scrWidth, 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
@@ -176,11 +193,55 @@ public class PKGameRenderer implements Renderer
 		gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
 		gl.glTranslatef(0.0f, 0.25f * PKEngine.scrHeight / PKEngine.scrWidth, 0.0f);
 		
+		if (playerPosition != playerNewPos.get(playerNewPos.size() - 1)) playerNewPos.add(playerPosition);
+		
+		if (playerNewPos.size() > 1)
+		{
+			// Need to animate map movement.
+			if (!animStart)
+			{
+				animRunTime = 0;
+				animStart = true;
+			}
+			
+			// Check direction of player movement.
+			if (playerNewPos.get(0) - playerNewPos.get(1) == 1)
+			{
+				// Player moved left, move map to the right.
+				translateCoords[0] -= 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (PKEngine.ANIMATION_TIME / loopRunTime);
+			}
+			if (playerNewPos.get(0) - playerNewPos.get(1) == -1)
+			{
+				// Player moved right, move map to the left.
+				translateCoords[0] += 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (PKEngine.ANIMATION_TIME / loopRunTime);
+			}
+			if (playerNewPos.get(0) - playerNewPos.get(1) == PKEngine.POV_MAP_WIDTH)
+			{
+				// Player moved up, move map down.
+				translateCoords[1] += 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (PKEngine.ANIMATION_TIME / loopRunTime);
+			}
+			if (playerNewPos.get(0) - playerNewPos.get(1) == -PKEngine.POV_MAP_WIDTH)
+			{
+				// Player moved down, move map up.
+				translateCoords[1] -= 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (PKEngine.ANIMATION_TIME / loopRunTime);
+			}
+			
+			animRunTime += loopRunTime;
+			System.out.println("animframes = " + animRunTime);
+			System.out.println("loop run time = " + loopRunTime);
+			
+			if (animRunTime > PKEngine.ANIMATION_TIME)
+			{
+				playerNewPos.remove(0);
+				translateCoords[0] = playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
+				translateCoords[1] = playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
+				animStart = false;
+			}
+		}
+		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
-		gl.glTranslatef(playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2),
-						playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2),
-						0.0f);
+		gl.glTranslatef(translateCoords[0], translateCoords[1], 0.0f);
 		
 		povMap.draw(gl);
 		gl.glPopMatrix();
