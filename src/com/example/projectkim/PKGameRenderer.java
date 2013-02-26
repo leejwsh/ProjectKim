@@ -287,14 +287,7 @@ public class PKGameRenderer implements Renderer
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 		
-		// Draw treasure chests.
-		for (int i = 0; i < 5; i++)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				
-			}
-		}
+		for (int i = 0; i < 9; i++) drawTreasureChest(gl, i, 0.0f, 0.0f);
 		
 		// Draw player sprite.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -312,14 +305,14 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 	}
 	
-	private void drawTreasureChest(GL10 gl, float x, float y)
+	private void drawTreasureChest(GL10 gl, int relativePos, float xOffset, float yOffset)
 	{
 		// Draw treasure chests.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
 		gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth - 0.5f, 0.0f);
+		gl.glTranslatef(0.0f + (relativePos % 3) * 1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth + 0.833f - (relativePos / 3) * 1.333f, 0.0f);
 		
 		//gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
 		//gl.glTranslatef(1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth - 0.5f, 0.0f);
@@ -327,9 +320,15 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
+		//gl.glEnable(GL10.GL_BLEND);
+		//gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ZERO);
+		
 		treasureChest.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
+		
+		//gl.glEnable(GL10.GL_BLEND);
+		//gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void drawTreasureKey(GL10 gl)
