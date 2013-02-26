@@ -26,8 +26,9 @@ public class PKEngine
 	// Constants for background.
 	public static final int BACKGROUND_LAYER_ONE = R.drawable.background;
 	
-	// Constants for map.
+	// Constants for PoV map.
 	public static final int POV_MAP = R.drawable.povmap;
+	public static final int TREASURE_CHEST = R.drawable.btn_chest;
 	public static final int POV_MAP_WIDTH = 3;
 	public static final int POV_MAP_HEIGHT = 3;
 	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
@@ -57,6 +58,10 @@ public class PKEngine
 	public static final int SPRITE_TIME_BETWEEN_STATIONARY_ANI = 1500;
 	public static final int TOTAL_ANIMATION_TIME = 1000;
 	
+	// Constants for main game UI.
+	public static final int TREASURE_KEY = R.drawable.btn_key;
+	public static final int MINI_MAP = R.drawable.minimap;
+	
 	// Variables for screen size.
 	public static int scrHeight;
 	public static int scrWidth;
@@ -64,8 +69,10 @@ public class PKEngine
 	// Variables for audio.
 	public static MediaPlayer player;
 	
-	// Variables for player sprite.
+	// Variables for main game UI.
 	public static int playerWalkAction = 0;
+	public static boolean treasureKeyEvent = false;
+	public static int[][] treasureLocations = new int[POV_MAP_HEIGHT][POV_MAP_WIDTH];
 	
 	// Kill game and exit.
 	public boolean onExit(View v)

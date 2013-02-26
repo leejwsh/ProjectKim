@@ -95,6 +95,11 @@ public class PKGame extends Activity
 					break;
 			}
 		}
+		if (x > 100 && x < 160 && y > 100 && y < 160)
+		{
+			// Treasure key.
+			PKEngine.treasureKeyEvent = true;
+		}
 		
 		return false;
 	}
