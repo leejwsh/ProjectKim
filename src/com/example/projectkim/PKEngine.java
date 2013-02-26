@@ -59,6 +59,8 @@ public class PKEngine
 	public static final int TOTAL_ANIMATION_TIME = 1000;
 	
 	// Constants for main game UI.
+	public static final int OVERLAY_TOP = R.drawable.overlay;
+	public static final int OVERLAY_BTM = R.drawable.overlay;
 	public static final int TREASURE_KEY = R.drawable.btn_key;
 	public static final int MINI_MAP = R.drawable.minimap;
 	

@@ -25,9 +25,12 @@ public class PKGameRenderer implements Renderer
 	private boolean animStart = false;
 	private int animRunTime = 0;
 	private float[] povMapCoords = new float[2];
+	private float[] treasureChestOffset = new float[2];
 	private float[] spriteCoords = new float[2];
 	
 	// Variables for rest elements of UI.
+	private PKImage overlayTop = new PKImage();
+	private PKImage overlayBtm = new PKImage();
 	private PKImage treasureKey = new PKImage();
 	private PKImage miniMap = new PKImage();
 	
@@ -61,6 +64,7 @@ public class PKGameRenderer implements Renderer
 		drawPlayer(gl);
 		
 		// Draw rest elements of UI.
+		drawOverlay(gl);
 		drawTreasureKey(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
@@ -73,6 +77,8 @@ public class PKGameRenderer implements Renderer
 		loopEnd = System.currentTimeMillis();
 		loopRunTime = loopEnd - loopStart;
 	}
+
+
 
 
 	@Override
@@ -114,6 +120,8 @@ public class PKGameRenderer implements Renderer
 		// Load textures.
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
 		povMap.loadTexture(gl, PKEngine.POV_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		overlayTop.loadTexture(gl, PKEngine.OVERLAY_TOP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		overlayBtm.loadTexture(gl, PKEngine.OVERLAY_BTM, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		treasureChest.loadTexture(gl, PKEngine.TREASURE_CHEST, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		treasureKey.loadTexture(gl, PKEngine.TREASURE_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
@@ -123,6 +131,28 @@ public class PKGameRenderer implements Renderer
 		playerNewPos.add(playerPosition);
 		povMapCoords[0] = playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
+		
+		//testing
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				if (i % 2 == 0)
+				{
+					if (j % 2 == 0)
+						PKEngine.treasureLocations[i][j] = 1;
+					else
+						PKEngine.treasureLocations[i][j] = 0;
+				}
+				else
+				{
+					if (j % 2 == 1)
+						PKEngine.treasureLocations[i][j] = 1;
+					else
+						PKEngine.treasureLocations[i][j] = 0;
+				}
+			}
+		}
 	}
 	
 	private void drawBackground(GL10 gl)
@@ -230,28 +260,32 @@ public class PKGameRenderer implements Renderer
 				// Player moved left, move map to the right.
 				if (animRunTime / PKEngine.SPRITE_TIME_BETWEEN_ANI % 2 == 0) spriteCoords = PKEngine.SPRITE_LEFT_1;
 				else spriteCoords = PKEngine.SPRITE_LEFT_2;
-				povMapCoords[0] -= 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				povMapCoords[0] -= 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (1.0f * PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				treasureChestOffset[0] += 1.0f * loopRunTime / PKEngine.TOTAL_ANIMATION_TIME;
 			}
 			if (playerNewPos.get(0) - playerNewPos.get(1) == -1)
 			{
 				// Player moved right, move map to the left.
 				if (animRunTime / PKEngine.SPRITE_TIME_BETWEEN_ANI % 2 == 0) spriteCoords = PKEngine.SPRITE_RIGHT_1;
 				else spriteCoords = PKEngine.SPRITE_RIGHT_2;
-				povMapCoords[0] += 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				povMapCoords[0] += 1.0f / (PKEngine.POV_MAP_WIDTH + 2) / (1.0f * PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				treasureChestOffset[0] -= 1.0f * loopRunTime / PKEngine.TOTAL_ANIMATION_TIME;
 			}
 			if (playerNewPos.get(0) - playerNewPos.get(1) == PKEngine.POV_MAP_WIDTH)
 			{
 				// Player moved up, move map down.
 				if (animRunTime / PKEngine.SPRITE_TIME_BETWEEN_ANI % 2 == 0) spriteCoords = PKEngine.SPRITE_UP_1;
 				else spriteCoords = PKEngine.SPRITE_UP_2;
-				povMapCoords[1] += 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				povMapCoords[1] += 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (1.0f * PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				treasureChestOffset[1] -= 1.0f * loopRunTime / PKEngine.TOTAL_ANIMATION_TIME;
 			}
 			if (playerNewPos.get(0) - playerNewPos.get(1) == -PKEngine.POV_MAP_WIDTH)
 			{
 				// Player moved down, move map up.
 				if (animRunTime / PKEngine.SPRITE_TIME_BETWEEN_ANI % 2 == 0) spriteCoords = PKEngine.SPRITE_DOWN_1;
 				else spriteCoords = PKEngine.SPRITE_DOWN_2;
-				povMapCoords[1] -= 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				povMapCoords[1] -= 1.0f / (PKEngine.POV_MAP_HEIGHT + 2) / (1.0f * PKEngine.TOTAL_ANIMATION_TIME / loopRunTime);
+				treasureChestOffset[1] += 1.0f * loopRunTime / PKEngine.TOTAL_ANIMATION_TIME;
 			}
 			
 			animRunTime += loopRunTime;
@@ -261,6 +295,8 @@ public class PKGameRenderer implements Renderer
 				playerNewPos.remove(0);
 				povMapCoords[0] = playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
 				povMapCoords[1] = playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
+				treasureChestOffset[0] = 0.0f;
+				treasureChestOffset[1] = 0.0f;
 				animStart = false;
 			}
 		}
@@ -287,7 +323,20 @@ public class PKGameRenderer implements Renderer
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 		
-		for (int i = 0; i < 9; i++) drawTreasureChest(gl, i, 0.0f, 0.0f);
+		// Draw all treasure chests on the PoV map.
+		for (int i = playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH - 2; i < playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH + 3; i++)
+		{
+			for (int j = playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH - 2; j < playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 3; j++)
+			{
+				if (i >= 0 && j >= 0 && i < PKEngine.POV_MAP_HEIGHT && j < PKEngine.POV_MAP_WIDTH)
+					if (PKEngine.treasureLocations[i][j] == 1)
+						drawTreasureChest(gl,
+										  j - playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 2,
+										  i - playerNewPos.get(0) / PKEngine.POV_MAP_HEIGHT + 2,
+										  treasureChestOffset[0],
+										  treasureChestOffset[1]);
+			}
+		}
 		
 		// Draw player sprite.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -305,30 +354,54 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 	}
 	
-	private void drawTreasureChest(GL10 gl, int relativePos, float xOffset, float yOffset)
+	private void drawTreasureChest(GL10 gl, int relativePosX, int relativePosY, float xOffset, float yOffset)
 	{
-		// Draw treasure chests.
+		// Draw a single treasure chest.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
 		gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(0.0f + (relativePos % 3) * 1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth + 0.833f - (relativePos / 3) * 1.333f, 0.0f);
-		
-		//gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		//gl.glTranslatef(1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth - 0.5f, 0.0f);
+		gl.glTranslatef(-1.5f + relativePosX * 1.5f + xOffset * 1.5f,
+						2.0f * PKEngine.scrHeight / PKEngine.scrWidth + 2.167f - relativePosY * 1.333f + yOffset * 1.333f,
+						0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
-		//gl.glEnable(GL10.GL_BLEND);
-		//gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ZERO);
-		
 		treasureChest.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
+	}
+	
+	private void drawOverlay(GL10 gl)
+	{
+		// Draw top overlay.
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(0.0f, 0.5f * PKEngine.scrHeight / PKEngine.scrWidth + 0.5f, 0.0f);
 		
-		//gl.glEnable(GL10.GL_BLEND);
-		//gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		overlayTop.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
+		
+		// Draw bottom overlay.
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(0.0f, 0.5f * PKEngine.scrHeight / PKEngine.scrWidth - 1.5f, 0.0f);
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		overlayBtm.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
 	}
 	
 	private void drawTreasureKey(GL10 gl)
