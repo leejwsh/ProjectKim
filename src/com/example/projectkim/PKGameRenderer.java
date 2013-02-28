@@ -1,6 +1,5 @@
 package com.example.projectkim;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
