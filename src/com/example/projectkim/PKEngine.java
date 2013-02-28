@@ -3,7 +3,6 @@ package com.example.projectkim;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.view.View;
 
 public class PKEngine
 {
@@ -37,18 +36,18 @@ public class PKEngine
 													0.0f, 1.0f };
 	
 	// Constants for player sprite.
-	public static final int PLAYER_SPRITE = R.drawable.spritesheet_treasurehunter_temp;
-	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.167f, 0.0f, 0.167f, 0.167f, 0.0f, 0.167f };
-	public static final float SPRITE_STATIONARY_1[] = { 0.333f, 0.833f };
-	public static final float SPRITE_STATIONARY_2[] = { 0.667f, 0.333f };
-	public static final float SPRITE_LEFT_1[] = { 0.167f, 0.5f };
-	public static final float SPRITE_LEFT_2[] = { 0.0f, 0.5f };
-	public static final float SPRITE_RIGHT_1[] = { 0.667f, 0.667f };
-	public static final float SPRITE_RIGHT_2[] = { 0.833f, 0.833f };
-	public static final float SPRITE_UP_1[] = { 0.5f, 0.667f };
-	public static final float SPRITE_UP_2[] = { 0.333f, 0.667f };
-	public static final float SPRITE_DOWN_1[] = { 0.0f, 0.333f };
-	public static final float SPRITE_DOWN_2[] = { 0.5f, 0.333f };
+	public static final int PLAYER_SPRITE = R.drawable.spritesheet_player;
+	public static final float PLAYER_TEXTURE[] = { 0.0f, 0.0f, 0.25f, 0.0f, 0.25f, 0.25f, 0.0f, 0.25f };
+	public static final float SPRITE_STATIONARY_1[] = { 0.25f, 0.75f };
+	public static final float SPRITE_STATIONARY_2[] = { 0.75f, 0.75f };
+	public static final float SPRITE_LEFT_1[] = { 0.0f, 0.0f };
+	public static final float SPRITE_LEFT_2[] = { 0.5f, 0.0f };
+	public static final float SPRITE_RIGHT_1[] = { 0.0f, 0.25f };
+	public static final float SPRITE_RIGHT_2[] = { 0.5f, 0.25f };
+	public static final float SPRITE_UP_1[] = { 0.0f, 0.5f };
+	public static final float SPRITE_UP_2[] = { 0.5f, 0.5f };
+	public static final float SPRITE_DOWN_1[] = { 0.0f, 0.75f };
+	public static final float SPRITE_DOWN_2[] = { 0.5f, 0.75f };
 	public static final int PLAYER_STATIONARY = 5;
 	public static final int PLAYER_LEFT = 4;
 	public static final int PLAYER_RIGHT = 6;
@@ -77,7 +76,7 @@ public class PKEngine
 	public static int[][] treasureLocations = new int[POV_MAP_HEIGHT][POV_MAP_WIDTH];
 	
 	// Kill game and exit.
-	public boolean onExit(View v)
+	public boolean onExit()
 	{
 		try
 		{

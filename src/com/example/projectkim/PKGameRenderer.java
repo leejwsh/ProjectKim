@@ -11,7 +11,7 @@ import android.opengl.GLSurfaceView.Renderer;
 public class PKGameRenderer implements Renderer
 {
 	// Variables for text.
-	private TexFont font;
+	//private TexFont font;
 	
 	// Variables for background.
 	private PKImage background = new PKImage();
@@ -78,9 +78,6 @@ public class PKGameRenderer implements Renderer
 		loopRunTime = loopEnd - loopStart;
 	}
 
-
-
-
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
@@ -107,7 +104,8 @@ public class PKGameRenderer implements Renderer
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		// Loads fonts
-		font = new TexFont(PKEngine.context, gl);
+		//font = new TexFont(PKEngine.context, gl);
+		/*
 		try
 		{
 			font.LoadFontAlt("visitor.bff", gl);
@@ -116,6 +114,7 @@ public class PKGameRenderer implements Renderer
 		{
 			e.printStackTrace();
 		}
+		*/
 		
 		// Load textures.
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
@@ -172,8 +171,8 @@ public class PKGameRenderer implements Renderer
 	
 	private void printLocationName(GL10 gl)
 	{
-		font.SetScale(1.0f);
-		font.PrintAt(gl, "<LOCATION NAME>", (PKEngine.scrWidth - font.GetTextLength("<LOCATION NAME>")) / 2, PKEngine.scrWidth - font.GetTextHeight());
+		//font.SetScale(1.0f);
+		//font.PrintAt(gl, "<LOCATION NAME>", (PKEngine.scrWidth - font.GetTextLength("<LOCATION NAME>")) / 2, PKEngine.scrWidth - font.GetTextHeight());
 		//font.PrintAt(gl, "<LOCATION NAME>", 0.5f * (PKEngine.scrWidth - font.GetTextLength("<LOCATION NAME>")), 0.0f);
 		//font.PrintAt(gl, "<LOCATION NAME>", 0.5f, 0.5f);
 	}
@@ -184,8 +183,8 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(1.5f, 2.0f * PKEngine.scrHeight / PKEngine.scrWidth - 0.5f, 0.0f);
+		gl.glScalef(0.2f, 0.2f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(2.0f, 2.5f * PKEngine.scrHeight / PKEngine.scrWidth - 2.5f, 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
@@ -323,21 +322,6 @@ public class PKGameRenderer implements Renderer
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 		
-		// Draw all treasure chests on the PoV map.
-		for (int i = playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH - 2; i < playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH + 3; i++)
-		{
-			for (int j = playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH - 2; j < playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 3; j++)
-			{
-				if (i >= 0 && j >= 0 && i < PKEngine.POV_MAP_HEIGHT && j < PKEngine.POV_MAP_WIDTH)
-					if (PKEngine.treasureLocations[i][j] == 1)
-						drawTreasureChest(gl,
-										  j - playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 2,
-										  i - playerNewPos.get(0) / PKEngine.POV_MAP_HEIGHT + 2,
-										  treasureChestOffset[0],
-										  treasureChestOffset[1]);
-			}
-		}
-		
 		// Draw player sprite.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -352,6 +336,21 @@ public class PKGameRenderer implements Renderer
 		player.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
+		
+		// Draw all treasure chests on the PoV map.
+		for (int i = playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH - 2; i < playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH + 3; i++)
+		{
+			for (int j = playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH - 2; j < playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 3; j++)
+			{
+				if (i >= 0 && j >= 0 && i < PKEngine.POV_MAP_HEIGHT && j < PKEngine.POV_MAP_WIDTH)
+					if (PKEngine.treasureLocations[i][j] == 1)
+						drawTreasureChest(gl,
+										  j - playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 2,
+										  i - playerNewPos.get(0) / PKEngine.POV_MAP_HEIGHT + 2,
+										  treasureChestOffset[0],
+										  treasureChestOffset[1]);
+			}
+		}
 	}
 	
 	private void drawTreasureChest(GL10 gl, int relativePosX, int relativePosY, float xOffset, float yOffset)
@@ -360,9 +359,9 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glScalef(0.25f, 0.25f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(-1.5f + relativePosX * 1.5f + xOffset * 1.5f,
-						2.0f * PKEngine.scrHeight / PKEngine.scrWidth + 2.167f - relativePosY * 1.333f + yOffset * 1.333f,
+		gl.glScalef(0.2f, 0.2f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
+		gl.glTranslatef(-1.333f + 1.667f * (relativePosX + xOffset), // (middlePos - 2 * 5 /3) + 5 / 3 * (relativePosX + xOffset)
+						2.0f * PKEngine.scrHeight / PKEngine.scrWidth + 3.333f + 1.667f * (-relativePosY + yOffset),
 						0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
@@ -428,7 +427,7 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
 		gl.glScalef(0.666f, 0.666f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(0.5f, 0.75f * PKEngine.scrHeight / PKEngine.scrWidth + 0.75f, 0.0f);
+		gl.glTranslatef(0.5f - 0.05f, 0.75f * PKEngine.scrHeight / PKEngine.scrWidth + 0.75f + 0.05f, 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();

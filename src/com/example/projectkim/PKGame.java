@@ -1,6 +1,9 @@
 package com.example.projectkim;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -102,5 +105,22 @@ public class PKGame extends Activity
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		new AlertDialog.Builder(this)
+		.setInverseBackgroundForced(true)
+		.setTitle("Quit Game?")
+		.setMessage("Your progress will not be saved. Are you sure you want to return to main menu?")
+		.setNegativeButton(android.R.string.no, null)
+		.setPositiveButton(android.R.string.yes, new OnClickListener()
+		{
+			public void onClick(DialogInterface arg0, int arg1)
+			{
+				PKGame.super.onBackPressed();
+			}
+		}).create().show();
 	}
 }

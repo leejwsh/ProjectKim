@@ -21,26 +21,22 @@ public final class R {
         public static final int btn_tutorial=0x7f020007;
         public static final int btn_tutorial_press=0x7f020008;
         public static final int exitselector=0x7f020009;
-        public static final int fake=0x7f02000a;
-        public static final int ic_launcher=0x7f02000b;
-        public static final int mainmenu=0x7f02000c;
-        public static final int minimap=0x7f02000d;
-        public static final int overlay=0x7f02000e;
-        public static final int povmap=0x7f02000f;
-        public static final int settingsselector=0x7f020010;
-        public static final int splash=0x7f020011;
-        public static final int spritesheet_kim=0x7f020012;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int mainmenu=0x7f02000b;
+        public static final int minimap=0x7f02000c;
+        public static final int overlay=0x7f02000d;
+        public static final int povmap=0x7f02000e;
+        public static final int settingsselector=0x7f02000f;
+        public static final int splash=0x7f020010;
+        public static final int spritesheet_player=0x7f020011;
+        public static final int spritesheet_test=0x7f020012;
         public static final int spritesheet_treasurehunter_temp=0x7f020013;
         public static final int startselector=0x7f020014;
     }
     public static final class id {
-        public static final int btnExit=0x7f080004;
-        public static final int btnSettings=0x7f080003;
-        public static final int btnStart=0x7f080002;
-        public static final int buttons=0x7f080001;
         public static final int mainMenuImage=0x7f080000;
-        public static final int menu_settings=0x7f080006;
-        public static final int splashScreenImage=0x7f080005;
+        public static final int menu_settings=0x7f080002;
+        public static final int splashScreenImage=0x7f080001;
     }
     public static final class layout {
         public static final int activity_project_kim=0x7f030000;

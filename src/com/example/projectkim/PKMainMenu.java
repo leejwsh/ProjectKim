@@ -3,14 +3,14 @@ package com.example.projectkim;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
+import android.view.MotionEvent;
 import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 
 public class PKMainMenu extends Activity
 {
+	private PKEngine engine;
+	private boolean gameStarted;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -32,22 +32,24 @@ public class PKMainMenu extends Activity
 		};
 		PKEngine.musicThread.start();
 		
-		final PKEngine engine = new PKEngine();
+		engine = new PKEngine();
+		gameStarted = false;
 		
 		// Set menu button options.
-		ImageButton start = (ImageButton)findViewById(R.id.btnStart);
-		ImageButton settings = (ImageButton)findViewById(R.id.btnSettings);
-		ImageButton exit = (ImageButton)findViewById(R.id.btnExit);
+		//ImageButton start = (ImageButton)findViewById(R.id.btnStart);
+		//ImageButton settings = (ImageButton)findViewById(R.id.btnSettings);
+		//ImageButton exit = (ImageButton)findViewById(R.id.btnExit);
 		
-		start.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
-		start.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
+		//start.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
+		//start.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
 		
-		settings.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
-		settings.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
+		//settings.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
+		//settings.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
 		
-		exit.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
-		exit.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
+		//exit.getBackground().setAlpha(PKEngine.MENU_BUTTON_ALPHA);
+		//exit.setHapticFeedbackEnabled(PKEngine.HAPTIC_BUTTON_FEEDBACK);
 		
+		/*
 		start.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -58,7 +60,9 @@ public class PKMainMenu extends Activity
 				PKMainMenu.this.startActivity(game);
 			}
 		});
+		*/
 		
+		/*
 		settings.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -67,7 +71,9 @@ public class PKMainMenu extends Activity
 				// TODO Open settings window.
 			}
 		});
+		*/
 		
+		/*
 		exit.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -83,29 +89,52 @@ public class PKMainMenu extends Activity
 				}
 			}
 		});
+		*/
 	}
 	
 	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		// Start game.
+		if (!gameStarted)
+		{
+			Intent game = new Intent(getApplicationContext(), PKGame.class);
+			PKMainMenu.this.startActivity(game);
+			gameStarted = true;
+		}
+		
+		return super.onTouchEvent(event);
+	}
+
+	@Override
 	protected void onPause()
 	{
-		super.onPause();
 		if (PKEngine.player != null) PKEngine.player.pause();
+		
+		super.onPause();
 	}
 
 	@Override
 	protected void onResume()
 	{
-		super.onResume();
 		if (PKEngine.player != null) PKEngine.player.start();
+		gameStarted = false;
+		
+		super.onResume();
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public void onBackPressed()
 	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
+		// Exit game.
+		boolean clean = false;
+		clean = engine.onExit();
+		if (clean)
 		{
-			findViewById(R.id.btnExit).performClick();
+			int pid = android.os.Process.myPid();
+			android.os.Process.killProcess(pid);
 		}
-		return false;
+		
+		super.onBackPressed();
 	}
 }
