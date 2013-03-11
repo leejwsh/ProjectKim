@@ -61,7 +61,9 @@ public class PKEngine
 	public static final int OVERLAY_TOP = R.drawable.overlay;
 	public static final int OVERLAY_BTM = R.drawable.overlay;
 	public static final int TREASURE_KEY = R.drawable.btn_key;
-	public static final int MINI_MAP = R.drawable.minimap;
+	public static final int MINI_MAP = R.drawable.ingame_minimap;
+	public static final int MINI_MAP_WIDTH = 532;
+	public static final int MINI_MAP_HEIGHT = 222;
 	
 	// Variables for screen size.
 	public static int scrHeight;

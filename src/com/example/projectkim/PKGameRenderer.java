@@ -31,7 +31,7 @@ public class PKGameRenderer implements Renderer
 	private PKImage overlayTop = new PKImage();
 	private PKImage overlayBtm = new PKImage();
 	private PKImage treasureKey = new PKImage();
-	private PKImage miniMap = new PKImage();
+	private PKImage miniMap = new PKImage(0.666f, 0.666f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	
 	// Variables for time.
 	private long loopStart = 0;
@@ -64,7 +64,7 @@ public class PKGameRenderer implements Renderer
 		
 		// Draw rest elements of UI.
 		drawOverlay(gl);
-		drawTreasureKey(gl);
+		//drawTreasureKey(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
 		
@@ -425,8 +425,7 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glScalef(0.666f, 0.666f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(0.5f - 0.05f, 0.75f * PKEngine.scrHeight / PKEngine.scrWidth + 0.75f + 0.05f, 0.0f);
+		gl.glTranslatef(0.333f, 0.75f + 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * (0.25f - 0.33f * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH), 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();

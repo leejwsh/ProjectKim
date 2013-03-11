@@ -26,17 +26,61 @@ public class PKImage
 								 1.0f, 1.0f, 0.0f,
 								 0.0f, 1.0f, 0.0f };
 	
-	private static float texture[] = { 0.0f, 0.0f,
-									   1.0f, 0.0f,
-									   1.0f, 1.0f,
-									   0.0f, 1.0f };
+	private float texture[] = { 0.0f, 0.0f,
+								1.0f, 0.0f,
+								1.0f, 1.0f,
+								0.0f, 1.0f };
 	
 	private byte indices[] = { 0, 1, 2,
 							   0, 2, 3 };
 	
 	public PKImage()
 	{
-		this(texture);
+		this(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	
+	public PKImage(float vertXScale, float vertYScale, float texXScale, float texYScale)
+	{
+		// Scale vertices.
+		for (int i = 0; i < vertices.length; i++)
+		{
+			switch (i % 3)
+			{
+				case 0: vertices[i] *= vertXScale;
+						break;
+				case 1: vertices[i] *= vertYScale;
+						break;
+			}
+		}
+		
+		// Scale texture.
+		for (int i = 0; i < texture.length; i++)
+		{
+			switch (i % 2)
+			{
+				case 0: vertices[i] *= texXScale;
+						break;
+				case 1: vertices[i] *= texYScale;
+						break;
+			}
+		}
+		
+		// Populate buffers.
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		vertexBuffer = byteBuf.asFloatBuffer();
+		vertexBuffer.put(vertices);
+		vertexBuffer.position(0);
+		
+		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		textureBuffer = byteBuf.asFloatBuffer();
+		textureBuffer.put(texture);
+		textureBuffer.position(0);
+		
+		indexBuffer = ByteBuffer.allocateDirect(indices.length);
+		indexBuffer.put(indices);
+		indexBuffer.position(0);
 	}
 	
 	public PKImage(float[] texture)
