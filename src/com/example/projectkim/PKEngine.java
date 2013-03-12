@@ -60,7 +60,12 @@ public class PKEngine
 	// Constants for main game UI.
 	public static final int OVERLAY_TOP = R.drawable.overlay;
 	public static final int OVERLAY_BTM = R.drawable.overlay;
-	public static final int TREASURE_KEY = R.drawable.btn_key;
+	public static final int TREASURE_KEY = R.drawable.ingame_statskeyicon;
+	public static final int TREASURE_KEY_WIDTH = 59;
+	public static final int TREASURE_KEY_HEIGHT = 63;
+	public static final int GOLD_COIN = R.drawable.ingame_statscoinicon;
+	public static final int GOLD_COIN_WIDTH = 66;
+	public static final int GOLD_COIN_HEIGHT = 52;
 	public static final int MINI_MAP = R.drawable.ingame_minimap;
 	public static final int MINI_MAP_WIDTH = 532;
 	public static final int MINI_MAP_HEIGHT = 222;
