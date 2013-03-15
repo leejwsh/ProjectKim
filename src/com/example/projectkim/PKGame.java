@@ -19,10 +19,10 @@ public class PKGame extends Activity
 		super.onCreate(savedInstanceState);
 		
 		new Connection().execute();
-		gameView = new PKGameView(this);
 		PKGameRenderer renderer = new PKGameRenderer();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(gameView);
+		setContentView(R.layout.game);
+		gameView = (PKGameView)findViewById(R.id.PKGameView);
 		gameView.setRenderer(renderer);
 	}
 	
