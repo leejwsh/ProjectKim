@@ -144,27 +144,45 @@ public class PKGameRenderer implements Renderer
 		povMapCoords[0] = playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
 		
-		//testing
+		// Initialisation of treasure locations.
+		
+		try {
+			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				if (i % 2 == 0)
-				{
-					if (j % 2 == 0)
-						PKEngine.treasureLocations[i][j] = 1;
-					else
-						PKEngine.treasureLocations[i][j] = 0;
-				}
-				else
-				{
-					if (j % 2 == 1)
-						PKEngine.treasureLocations[i][j] = 1;
-					else
-						PKEngine.treasureLocations[i][j] = 0;
-				}
+				PKEngine.treasureLocations[i][j] = PKEngine.client.getTreasureList2D()[i][j];
+				
 			}
 		}
+		
+		//testing
+//		for (int i = 0; i < 3; i++)
+//		{
+//			for (int j = 0; j < 3; j++)
+//			{
+//				if (i % 2 == 0)
+//				{
+//					if (j % 2 == 0)
+//						PKEngine.treasureLocations[i][j] = 1;
+//					else
+//						PKEngine.treasureLocations[i][j] = 0;
+//				}
+//				else
+//				{
+//					if (j % 2 == 1)
+//						PKEngine.treasureLocations[i][j] = 1;
+//					else
+//						PKEngine.treasureLocations[i][j] = 0;
+//				}
+//			}
+//		}
 	}
 	
 	private void drawBackground(GL10 gl)
