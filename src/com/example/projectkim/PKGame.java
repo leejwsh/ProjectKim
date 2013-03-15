@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -19,9 +20,31 @@ public class PKGame extends Activity
 		
 		gameView = new PKGameView(this);
 		PKGameRenderer renderer = new PKGameRenderer();
+		new Connection().execute();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(gameView);
 		gameView.setRenderer(renderer);
+	}
+	
+	private class Connection extends AsyncTask<String, Void, String>
+	{
+
+		@Override
+		protected String doInBackground(String... arg0)
+		{
+			try
+			{
+				System.out.print("Establishing connection... ");
+				PKEngine.client = new GameClient();
+				System.out.println("Connected.");
+			}
+			catch (Exception e)
+			{
+				System.out.println(e);
+				e.printStackTrace();
+			}
+			return null;
+		}
 	}
 	
 	@Override

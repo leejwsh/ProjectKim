@@ -53,6 +53,9 @@ public class PKGameRenderer implements Renderer
 			e.printStackTrace();
 		}
 		
+		// Update player location.
+		//playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
+		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
@@ -69,6 +72,13 @@ public class PKGameRenderer implements Renderer
 		drawGoldCoin(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
+		
+		try {
+			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -129,6 +139,7 @@ public class PKGameRenderer implements Renderer
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// Initialisation for player position.
+		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
 		playerNewPos.add(playerPosition);
 		povMapCoords[0] = playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);

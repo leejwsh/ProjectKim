@@ -6,6 +6,9 @@ import android.media.MediaPlayer;
 
 public class PKEngine
 {
+	// Constants for connection to server.
+	public static final int PLAYER_ID = 1;
+	
 	// Constants for threads.
 	public static final int GAME_THREAD_DELAY = 1000;
 	public static final int GAME_THREAD_FPS_SLEEP = (1000/60);
@@ -69,6 +72,9 @@ public class PKEngine
 	public static final int MINI_MAP = R.drawable.ingame_minimap;
 	public static final int MINI_MAP_WIDTH = 532;
 	public static final int MINI_MAP_HEIGHT = 222;
+	
+	// Variables for connection to server.
+	public static GameClient client;
 	
 	// Variables for screen size.
 	public static int scrHeight;
