@@ -12,15 +12,14 @@ import android.view.Window;
 public class PKGame extends Activity
 {
 	private PKGameView gameView;
-	private boolean connect = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		gameView = new PKGameView(this);
 		new Connection().execute();
+		gameView = new PKGameView(this);
 		PKGameRenderer renderer = new PKGameRenderer();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(gameView);
@@ -33,19 +32,16 @@ public class PKGame extends Activity
 		@Override
 		protected String doInBackground(String... arg0)
 		{
-			if (connect == false){
-				try
-				{
-					System.out.print("Establishing connection... ");
-					PKEngine.client = new GameClient();
-					System.out.println("Connected.");
-					connect = true;
-				}
-				catch (Exception e)
-				{
-					System.out.println(e);
-					e.printStackTrace();
-				}
+			try
+			{
+				System.out.print("Establishing connection... ");
+				PKEngine.client = new GameClient();
+				System.out.println("Connected.");
+			}
+			catch (Exception e)
+			{
+				System.out.println(e);
+				e.printStackTrace();
 			}
 			return null;
 		}

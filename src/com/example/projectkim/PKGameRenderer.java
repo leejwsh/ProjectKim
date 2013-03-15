@@ -39,6 +39,9 @@ public class PKGameRenderer implements Renderer
 	private long loopEnd = 0;
 	private long loopRunTime = 0;
 	
+	// testing
+	private long startTime = 0;
+	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
@@ -53,8 +56,23 @@ public class PKGameRenderer implements Renderer
 			e.printStackTrace();
 		}
 		
+		// testing
+		if (System.currentTimeMillis() - startTime > 2000)
+		{
+			// Update positions on server.
+			try
+			{
+				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			startTime = System.currentTimeMillis();
+		}
+		
 		// Update player location.
-		//playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
+		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
 		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -72,13 +90,6 @@ public class PKGameRenderer implements Renderer
 		drawGoldCoin(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
-		
-		try {
-			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -138,6 +149,19 @@ public class PKGameRenderer implements Renderer
 		goldCoin.loadTexture(gl, PKEngine.GOLD_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
+		// testing
+		startTime = System.currentTimeMillis();
+		
+		// Initialise positions on server.
+		try
+		{
+			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 		// Initialisation for player position.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
 		playerNewPos.add(playerPosition);
@@ -145,14 +169,6 @@ public class PKGameRenderer implements Renderer
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
 		
 		// Initialisation of treasure locations.
-		
-		try {
-			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
@@ -161,28 +177,6 @@ public class PKGameRenderer implements Renderer
 				
 			}
 		}
-		
-		//testing
-//		for (int i = 0; i < 3; i++)
-//		{
-//			for (int j = 0; j < 3; j++)
-//			{
-//				if (i % 2 == 0)
-//				{
-//					if (j % 2 == 0)
-//						PKEngine.treasureLocations[i][j] = 1;
-//					else
-//						PKEngine.treasureLocations[i][j] = 0;
-//				}
-//				else
-//				{
-//					if (j % 2 == 1)
-//						PKEngine.treasureLocations[i][j] = 1;
-//					else
-//						PKEngine.treasureLocations[i][j] = 0;
-//				}
-//			}
-//		}
 	}
 	
 	private void drawBackground(GL10 gl)
