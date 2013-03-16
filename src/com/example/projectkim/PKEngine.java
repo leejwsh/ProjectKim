@@ -30,7 +30,7 @@ public class PKEngine
 	
 	// Constants for PoV map.
 	public static final int POV_MAP = R.drawable.povmap;
-	public static final int TREASURE_CHEST = R.drawable.btn_chest;
+	public static final int TREASURE_CHEST = R.drawable.chest;
 	public static final int POV_MAP_WIDTH = 3;
 	public static final int POV_MAP_HEIGHT = 3;
 	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
@@ -61,7 +61,7 @@ public class PKEngine
 	public static final int TOTAL_ANIMATION_TIME = 1000;
 	
 	// Constants for main game UI.
-	public static final int OVERLAY_TOP = R.drawable.overlay;
+	public static final int OVERLAY_TOP = R.drawable.topsection;
 	public static final int OVERLAY_BTM = R.drawable.overlay;
 	public static final int TREASURE_KEY = R.drawable.ingame_statskeyicon;
 	public static final int TREASURE_KEY_WIDTH = 59;
@@ -95,6 +95,7 @@ public class PKEngine
 		{
 			Intent bgmusic = new Intent(context, PKMusic.class);
 			context.stopService(bgmusic);
+			client.closeSocket();
 			musicThread = null;
 			return true;
 		}

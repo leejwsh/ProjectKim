@@ -475,4 +475,15 @@ public class PKGameRenderer implements Renderer
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}
+
+	public boolean openChest() throws Exception
+	{
+		if (PKEngine.client.getTreasureList()[playerPosition] == 1)
+		{
+			//PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+			//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
+			return true;
+		}
+		return false;
+	}
 }
