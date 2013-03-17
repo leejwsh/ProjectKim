@@ -203,7 +203,7 @@ public class GameClient {
 		System.out.println(reply + " [openTreasureEvent: GameClient.java]");
 		/* End of UDP protocol */
 
-		// Game Server's openTreasureEvent reply format: a mini game ID: 0 1 2 ... < MG_NUM
+		// Game Server's openTreasureEvent reply format: Failure or Successful
 		return reply;
 	}
 
@@ -268,12 +268,12 @@ public class GameClient {
 		// Game Server's addKeyEvent reply format: Failure or Successful
 		return reply;
 	}
-
-	// Returns the 1D location of a playerID
+	
+	// Returns 1D location of player
 	public int getPlayerLocation(int playerID) {
 		return playerLocation[playerID];
 	}
-	
+
 	// Returns the X position of a playerID
 	public int getPlayerX(int playerID) {
 

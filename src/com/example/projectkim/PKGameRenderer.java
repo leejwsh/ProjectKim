@@ -26,6 +26,7 @@ public class PKGameRenderer implements Renderer
 	private float[] povMapCoords = new float[2];
 	private float[] treasureChestOffset = new float[2];
 	private float[] spriteCoords = new float[2];
+	private boolean isChestOpen = false;
 	
 	// Variables for rest elements of UI.
 	private PKImage overlayTop = new PKImage();
@@ -62,7 +63,13 @@ public class PKGameRenderer implements Renderer
 			// Update positions on server.
 			try
 			{
+				if (isChestOpen)
+				{
+					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+					isChestOpen = false;
+				}
 				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			}
 			catch (Exception e)
 			{
@@ -73,6 +80,9 @@ public class PKGameRenderer implements Renderer
 		
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
+		
+		// Update treasure location.
+		checkTreasureLocation();
 		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -156,6 +166,8 @@ public class PKGameRenderer implements Renderer
 		try
 		{
 			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+			PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, 4597);
+			PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, 6914);
 		}
 		catch (Exception e)
 		{
@@ -169,6 +181,11 @@ public class PKGameRenderer implements Renderer
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
 		
 		// Initialisation of treasure locations.
+		checkTreasureLocation();
+	}
+	
+	private void checkTreasureLocation()
+	{
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
@@ -480,7 +497,7 @@ public class PKGameRenderer implements Renderer
 	{
 		if (PKEngine.client.getTreasureList()[playerPosition] == 1)
 		{
-			//PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+			isChestOpen = true;
 			//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			return true;
 		}
