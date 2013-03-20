@@ -19,7 +19,12 @@ public class PKGame extends Activity
 {
 	private PKGameView gameView;
 	private PKGameRenderer renderer;
-	private TableLayout keypad;
+	private TableLayout keypad, keypadInput;
+	private ImageButton num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
+	private ImageButton[] keyInput = new ImageButton[4];
+	private int[] numbers = new int[10];
+	private int keyCode;
+	private int currentKeyPos;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -38,23 +43,38 @@ public class PKGame extends Activity
 		openChest.setBackgroundColor(Color.TRANSPARENT);
 		
 		keypad = (TableLayout)findViewById(R.id.keypad);
-		ImageButton numZero = (ImageButton)findViewById(R.id.numZero);
-		ImageButton numOne = (ImageButton)findViewById(R.id.numOne);
-		ImageButton numTwo = (ImageButton)findViewById(R.id.numTwo);
-		ImageButton numThree = (ImageButton)findViewById(R.id.numThree);
-		ImageButton numFour = (ImageButton)findViewById(R.id.numFour);
-		ImageButton numFive = (ImageButton)findViewById(R.id.numFive);
-		ImageButton numSix = (ImageButton)findViewById(R.id.numSix);
-		ImageButton numSeven = (ImageButton)findViewById(R.id.numSeven);
-		ImageButton numEight = (ImageButton)findViewById(R.id.numEight);
-		ImageButton numNine = (ImageButton)findViewById(R.id.numNine);
+		keypadInput = (TableLayout)findViewById(R.id.keypadInput);
+		num0 = (ImageButton)findViewById(R.id.num0);
+		num1 = (ImageButton)findViewById(R.id.num1);
+		num2 = (ImageButton)findViewById(R.id.num2);
+		num3 = (ImageButton)findViewById(R.id.num3);
+		num4 = (ImageButton)findViewById(R.id.num4);
+		num5 = (ImageButton)findViewById(R.id.num5);
+		num6 = (ImageButton)findViewById(R.id.num6);
+		num7 = (ImageButton)findViewById(R.id.num7);
+		num8 = (ImageButton)findViewById(R.id.num8);
+		num9 = (ImageButton)findViewById(R.id.num9);
+		numbers[0] = R.drawable.num0;
+		numbers[1] = R.drawable.num1;
+		numbers[2] = R.drawable.num2;
+		numbers[3] = R.drawable.num3;
+		numbers[4] = R.drawable.num4;
+		numbers[5] = R.drawable.num5;
+		numbers[6] = R.drawable.num6;
+		numbers[7] = R.drawable.num7;
+		numbers[8] = R.drawable.num8;
+		numbers[9] = R.drawable.num9;
+		keyInput[0] = (ImageButton)findViewById(R.id.blank0);
+		keyInput[1] = (ImageButton)findViewById(R.id.blank1);
+		keyInput[2] = (ImageButton)findViewById(R.id.blank2);
+		keyInput[3] = (ImageButton)findViewById(R.id.blank3);
 		ImageButton numDel = (ImageButton)findViewById(R.id.numDel);
 		ImageButton numEnter = (ImageButton)findViewById(R.id.numEnter);
+		currentKeyPos = 0;
 	}
 	
 	public void buttonOnClick(View v) throws Exception
 	{
-		// Dun delete this [Can use this way next time if there is more buttons]
 		switch (v.getId()) {
 			case R.id.btnOpenChest:
 				boolean hasChest = renderer.openChest();
@@ -71,12 +91,109 @@ public class PKGame extends Activity
 				}
 				break;
 			case R.id.btnKey:
-				if (keypad.getVisibility() == View.INVISIBLE) keypad.setVisibility(View.VISIBLE);
-				else keypad.setVisibility(View.INVISIBLE);
+				if (keypad.getVisibility() == View.INVISIBLE)
+				{
+					keypad.setVisibility(View.VISIBLE);
+					keypadInput.setVisibility(View.VISIBLE);
+				}
+				else 
+				{
+					keypad.setVisibility(View.INVISIBLE);
+					keypadInput.setVisibility(View.INVISIBLE);
+					resetKeyCode();
+					currentKeyPos = 0;
+				}
+				break;
+			case R.id.num0:
+				addNumber(0,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num1:
+				addNumber(1,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num2:
+				addNumber(2,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num3:
+				addNumber(3,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num4:
+				addNumber(4,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num5:
+				addNumber(5,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num6:
+				addNumber(6,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num7:
+				addNumber(7,currentKeyPos);
+				if (currentKeyPos < 4){
+
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num8:
+				addNumber(8,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.num9:
+				addNumber(9,currentKeyPos);
+				if (currentKeyPos < 4){
+					currentKeyPos++;
+				}
+				break;
+			case R.id.numDel:
+				if (currentKeyPos > 0)
+				{
+					deleteNumber(currentKeyPos-1);
+					currentKeyPos--;
+				}
 				break;
 		}	
 	}
 	
+	private void resetKeyCode() {
+		for (int i=0; i<keyInput.length; i++){
+			keyInput[i].setImageResource(R.drawable.numblank);
+		}
+	}
+
+	private void deleteNumber(int currentKeyPos) {
+		keyInput[currentKeyPos].setImageResource(R.drawable.numblank);
+		System.out.println(currentKeyPos);
+	}
+
+	private void addNumber(int num, int currentKeyPos) {
+		if (currentKeyPos < 4){
+			keyInput[currentKeyPos].setImageResource(numbers[num]);
+			System.out.println(currentKeyPos);
+		}
+		//blank0.setImageResource(R.drawable.num0);
+	}
+
 	private class Connection extends AsyncTask<String, Void, String>
 	{
 

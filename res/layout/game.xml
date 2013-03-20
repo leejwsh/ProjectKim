@@ -34,6 +34,37 @@
         
     </GridLayout>
     -->
+    <TableLayout
+        android:id="@+id/keypadInput"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="20dip"
+		android:visibility="invisible">
+	    <TableRow>
+	        <ImageButton 
+		            android:id="@+id/blank0"
+		            android:src="@drawable/numblank"
+		            android:padding="0dip">
+			</ImageButton>
+			<ImageButton 
+		            android:id="@+id/blank1"
+		            android:src="@drawable/numblank"
+		            android:padding="0dip">
+			</ImageButton>
+			<ImageButton 
+		            android:id="@+id/blank2"
+		            android:src="@drawable/numblank"
+		            android:padding="0dip">
+			</ImageButton>
+			<ImageButton 
+		            android:id="@+id/blank3"
+		            android:src="@drawable/numblank"
+		            android:padding="0dip">
+			</ImageButton>
+	    </TableRow>
+    </TableLayout>
+    
 	<TableLayout 
 	    android:id="@+id/keypad"
 		android:layout_width="wrap_content"
@@ -42,58 +73,64 @@
 		android:visibility="invisible">
 	    <TableRow>
 	        <ImageButton 
-	            android:id="@+id/numOne"
+	            android:id="@+id/num1"
 	            android:src="@drawable/num1"
 	            android:padding="0dip"
-	            android:clickable="true">
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numTwo"
+	            android:id="@+id/num2"
 	            android:src="@drawable/num2"
 	            android:padding="0dip"
-	            android:clickable="true">
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numThree"
+	            android:id="@+id/num3"
 	            android:src="@drawable/num3"
 	            android:padding="0dip"
-	            android:clickable="true">
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 	    </TableRow>
 	    
 	    <TableRow>
 	        <ImageButton 
-	            android:id="@+id/numFour"
+	            android:id="@+id/num4"
 	            android:src="@drawable/num4"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numFive"
+	            android:id="@+id/num5"
 	            android:src="@drawable/num5"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numSix"
+	            android:id="@+id/num6"
 	            android:src="@drawable/num6"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 	    </TableRow>
 	    
 	    <TableRow>
 	        <ImageButton 
-	            android:id="@+id/numSeven"
+	            android:id="@+id/num7"
 	            android:src="@drawable/num7"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numEight"
+	            android:id="@+id/num8"
 	            android:src="@drawable/num8"
-	            android:padding="0dip">
+	            android:padding="0dip"
+   	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numNine"
+	            android:id="@+id/num9"
 	            android:src="@drawable/num9"
-	            android:padding="0dip">
+	            android:padding="0dip"
+   	            android:onClick="buttonOnClick">
 			</ImageButton>
 	    </TableRow>
 	    
@@ -101,12 +138,14 @@
 	        <ImageButton 
 	            android:id="@+id/numDel"
 	            android:src="@drawable/numdel"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
-	            android:id="@+id/numZero"
+	            android:id="@+id/num0"
 	            android:src="@drawable/num0"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
 	            android:id="@+id/numEnter"

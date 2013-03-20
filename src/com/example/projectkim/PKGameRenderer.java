@@ -58,25 +58,25 @@ public class PKGameRenderer implements Renderer
 		}
 		
 		// testing
-		if (System.currentTimeMillis() - startTime > 2000)
-		{
-			// Update positions on server.
-			try
-			{
-				if (isChestOpen)
-				{
-					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
-					isChestOpen = false;
-				}
-				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			startTime = System.currentTimeMillis();
-		}
+//		if (System.currentTimeMillis() - startTime > 2000)
+//		{
+//			// Update positions on server.
+//			try
+//			{
+//				if (isChestOpen)
+//				{
+//					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+//					isChestOpen = false;
+//				}
+//				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+//				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
+//			}
+//			catch (Exception e)
+//			{
+//				e.printStackTrace();
+//			}
+//			startTime = System.currentTimeMillis();
+//		}
 		
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
