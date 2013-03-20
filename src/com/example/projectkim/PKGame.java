@@ -11,12 +11,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 public class PKGame extends Activity
 {
 	private PKGameView gameView;
 	private PKGameRenderer renderer;
+	private TableLayout keypad;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -33,31 +36,45 @@ public class PKGame extends Activity
 		Button openChest = (Button)findViewById(R.id.btnOpenChest);
 		openChest.setVisibility(View.VISIBLE);
 		openChest.setBackgroundColor(Color.TRANSPARENT);
+		
+		keypad = (TableLayout)findViewById(R.id.keypad);
+		ImageButton numZero = (ImageButton)findViewById(R.id.numZero);
+		ImageButton numOne = (ImageButton)findViewById(R.id.numOne);
+		ImageButton numTwo = (ImageButton)findViewById(R.id.numTwo);
+		ImageButton numThree = (ImageButton)findViewById(R.id.numThree);
+		ImageButton numFour = (ImageButton)findViewById(R.id.numFour);
+		ImageButton numFive = (ImageButton)findViewById(R.id.numFive);
+		ImageButton numSix = (ImageButton)findViewById(R.id.numSix);
+		ImageButton numSeven = (ImageButton)findViewById(R.id.numSeven);
+		ImageButton numEight = (ImageButton)findViewById(R.id.numEight);
+		ImageButton numNine = (ImageButton)findViewById(R.id.numNine);
+		ImageButton numDel = (ImageButton)findViewById(R.id.numDel);
+		ImageButton numEnter = (ImageButton)findViewById(R.id.numEnter);
 	}
 	
 	public void buttonOnClick(View v) throws Exception
 	{
 		// Dun delete this [Can use this way next time if there is more buttons]
-//		switch (v.getId()) {
-//	      case R.id.button1:
-//	        doSomething1();
-//	        break;
-//	      case R.id.button2:
-//	        doSomething2();
-//	        break;
-//	      }
-		boolean hasChest = renderer.openChest();
-		if (hasChest)
-		{
-			// Testing Message
-			Toast msg = Toast.makeText(PKGame.this, "Successfully Opened!", Toast.LENGTH_SHORT);
-			msg.show();
-		} else
-		{
-			// Testing Message
-			Toast msg = Toast.makeText(PKGame.this, "Are you sure there's a chest here?", Toast.LENGTH_SHORT);
-			msg.show();
-		}
+		switch (v.getId()) {
+			case R.id.btnOpenChest:
+				boolean hasChest = renderer.openChest();
+				if (hasChest)
+				{
+					// Testing Message
+					Toast msg = Toast.makeText(PKGame.this, "Successfully Opened!", Toast.LENGTH_SHORT);
+					msg.show();
+				} else
+				{
+					// Testing Message
+					Toast msg = Toast.makeText(PKGame.this, "Are you sure there's a chest here?", Toast.LENGTH_SHORT);
+					msg.show();
+				}
+				break;
+			case R.id.btnKey:
+				if (keypad.getVisibility() == View.INVISIBLE) keypad.setVisibility(View.VISIBLE);
+				else keypad.setVisibility(View.INVISIBLE);
+				break;
+		}	
 	}
 	
 	private class Connection extends AsyncTask<String, Void, String>
