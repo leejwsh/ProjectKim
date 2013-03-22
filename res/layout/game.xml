@@ -150,7 +150,8 @@
 			<ImageButton 
 	            android:id="@+id/numEnter"
 	            android:src="@drawable/numenter"
-	            android:padding="0dip">
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
 			</ImageButton>
 	    </TableRow>
     </TableLayout>

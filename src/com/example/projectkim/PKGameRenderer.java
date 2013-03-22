@@ -27,6 +27,8 @@ public class PKGameRenderer implements Renderer
 	private float[] treasureChestOffset = new float[2];
 	private float[] spriteCoords = new float[2];
 	private boolean isChestOpen = false;
+	private boolean checkKey = false;
+	private int keyCode;
 	
 	// Variables for rest elements of UI.
 	private PKImage overlayTop = new PKImage();
@@ -57,26 +59,35 @@ public class PKGameRenderer implements Renderer
 			e.printStackTrace();
 		}
 		
-		// testing
-//		if (System.currentTimeMillis() - startTime > 2000)
-//		{
-//			// Update positions on server.
-//			try
-//			{
-//				if (isChestOpen)
-//				{
-//					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
-//					isChestOpen = false;
-//				}
-//				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-//				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
-//			}
-//			catch (Exception e)
-//			{
-//				e.printStackTrace();
-//			}
-//			startTime = System.currentTimeMillis();
-//		}
+		if (System.currentTimeMillis() - startTime > 2000)
+		{
+			// Update positions on server.
+			try
+			{
+				// Update new location of chest if current chest is open
+				if (isChestOpen)
+				{
+					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+					isChestOpen = false;
+				}
+				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			startTime = System.currentTimeMillis();
+		}
+		
+		if (checkKey){
+			try {
+				PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, keyCode);
+				checkKey = false;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
@@ -166,8 +177,6 @@ public class PKGameRenderer implements Renderer
 		try
 		{
 			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-			PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, 4597);
-			PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, 6914);
 		}
 		catch (Exception e)
 		{
@@ -501,6 +510,13 @@ public class PKGameRenderer implements Renderer
 			//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			return true;
 		}
+		return false;
+	}
+
+	public boolean verifyKey(int keyCode)
+	{
+		this.keyCode = keyCode;
+		checkKey = true;
 		return false;
 	}
 }

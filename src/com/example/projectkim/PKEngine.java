@@ -75,6 +75,7 @@ public class PKEngine
 	
 	// Variables for connection to server.
 	public static GameClient client;
+	public static boolean isConnected = false;
 	
 	// Variables for screen size.
 	public static int scrHeight;
@@ -95,7 +96,8 @@ public class PKEngine
 		{
 			Intent bgmusic = new Intent(context, PKMusic.class);
 			context.stopService(bgmusic);
-			client.closeSocket();
+			if (isConnected)
+				client.closeSocket();
 			musicThread = null;
 			return true;
 		}

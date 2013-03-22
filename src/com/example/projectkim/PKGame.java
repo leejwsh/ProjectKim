@@ -23,7 +23,7 @@ public class PKGame extends Activity
 	private ImageButton num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
 	private ImageButton[] keyInput = new ImageButton[4];
 	private int[] numbers = new int[10];
-	private int keyCode;
+	private String keyCode = "";
 	private int currentKeyPos;
 	
 	@Override
@@ -149,7 +149,6 @@ public class PKGame extends Activity
 			case R.id.num7:
 				addNumber(7,currentKeyPos);
 				if (currentKeyPos < 4){
-
 					currentKeyPos++;
 				}
 				break;
@@ -172,26 +171,51 @@ public class PKGame extends Activity
 					currentKeyPos--;
 				}
 				break;
+			case R.id.numEnter:
+				if (keyCode.equalsIgnoreCase(""))
+					keyCode = keyCode.concat(String.valueOf(0));
+				boolean hasKey = renderer.verifyKey(Integer.valueOf(keyCode));
+				if (hasKey)
+				{
+					// Testing Message
+					Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
+					msg.show();
+					keypad.setVisibility(View.INVISIBLE);
+					keypadInput.setVisibility(View.INVISIBLE);
+					resetKeyCode();
+					currentKeyPos = 0;
+				} else
+				{
+					// Testing Message
+					Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
+					msg.show();
+				}
+				break;
 		}	
 	}
 	
-	private void resetKeyCode() {
+	private void resetKeyCode()
+	{
 		for (int i=0; i<keyInput.length; i++){
 			keyInput[i].setImageResource(R.drawable.numblank);
 		}
+		keyCode = "";
 	}
 
-	private void deleteNumber(int currentKeyPos) {
+	private void deleteNumber(int currentKeyPos)
+	{
 		keyInput[currentKeyPos].setImageResource(R.drawable.numblank);
-		System.out.println(currentKeyPos);
+		keyCode = keyCode.substring(0, currentKeyPos);
+		System.out.println("KeyCode: " + keyCode);
 	}
 
-	private void addNumber(int num, int currentKeyPos) {
+	private void addNumber(int num, int currentKeyPos)
+	{
 		if (currentKeyPos < 4){
 			keyInput[currentKeyPos].setImageResource(numbers[num]);
-			System.out.println(currentKeyPos);
+			keyCode = keyCode.concat(String.valueOf(num));
+			System.out.println("KeyCode: " + keyCode);
 		}
-		//blank0.setImageResource(R.drawable.num0);
 	}
 
 	private class Connection extends AsyncTask<String, Void, String>
@@ -204,6 +228,7 @@ public class PKGame extends Activity
 			{
 				System.out.print("Establishing connection... ");
 				PKEngine.client = new GameClient();
+				PKEngine.isConnected = true;
 				System.out.println("Connected.");
 			}
 			catch (Exception e)

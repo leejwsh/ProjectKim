@@ -39,6 +39,7 @@ public class GameClient {
 	private int[][] playerList;
 
 	private int[] treasureList; // stores treasure location
+	private int[] keyCodeList; // stores the key codes
 
 	// globalEvent code: Stores the current global game status
 	// 0 = pre-game
