@@ -50,14 +50,15 @@ public final class R {
         public static final int numenter=0x7f020024;
         public static final int numkey2=0x7f020025;
         public static final int overlay=0x7f020026;
-        public static final int povmap=0x7f020027;
-        public static final int settingsselector=0x7f020028;
-        public static final int splash=0x7f020029;
-        public static final int spritesheet_player=0x7f02002a;
-        public static final int spritesheet_test=0x7f02002b;
-        public static final int spritesheet_treasurehunter_temp=0x7f02002c;
-        public static final int startselector=0x7f02002d;
-        public static final int topsection=0x7f02002e;
+        public static final int overlay_top=0x7f020027;
+        public static final int povmap=0x7f020028;
+        public static final int settingsselector=0x7f020029;
+        public static final int splash=0x7f02002a;
+        public static final int spritesheet_player=0x7f02002b;
+        public static final int spritesheet_test=0x7f02002c;
+        public static final int spritesheet_treasurehunter_temp=0x7f02002d;
+        public static final int startselector=0x7f02002e;
+        public static final int topsection=0x7f02002f;
     }
     public static final class id {
         public static final int PKGameView=0x7f080001;

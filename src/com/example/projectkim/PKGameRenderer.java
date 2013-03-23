@@ -31,7 +31,7 @@ public class PKGameRenderer implements Renderer
 	private int keyCode;
 	
 	// Variables for rest elements of UI.
-	private PKImage overlayTop = new PKImage();
+	private PKImage overlayTop = new PKImage(1.0f, 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 1.0f, 1.0f);
 	private PKImage overlayBtm = new PKImage();
 	private PKImage treasureKey = new PKImage(0.1f, 0.1f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.TREASURE_KEY_HEIGHT / PKEngine.TREASURE_KEY_WIDTH, 1.0f, 1.0f);
 	private PKImage goldCoin = new PKImage(0.1f, 0.1f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
@@ -429,8 +429,8 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glScalef(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight, 1.0f);
-		gl.glTranslatef(0.0f, 0.5f * PKEngine.scrHeight / PKEngine.scrWidth + 0.5f, 0.0f);
+		gl.glScalef(1.0f, 1.0f, 1.0f);
+		gl.glTranslatef(0.0f, 1.0f - 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
@@ -492,7 +492,7 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glTranslatef(0.333f, 0.75f + 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * (0.25f - 0.33f * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH), 0.0f);
+		gl.glTranslatef(0.3f, 0.75f + 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * (0.25f - 0.33f * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH), 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
