@@ -26,9 +26,8 @@ public class PKGameRenderer implements Renderer
 	private float[] povMapCoords = new float[2];
 	private float[] treasureChestOffset = new float[2];
 	private float[] spriteCoords = new float[2];
-	private boolean isChestOpen = false;
-	private boolean checkKey = false;
-	private int keyCode;
+	private String checkKeyReply;
+	private String checkChestReply;
 	
 	// Variables for rest elements of UI.
 	private PKImage overlayTop = new PKImage(1.0f, 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 1.0f, 1.0f);
@@ -65,11 +64,11 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				// Update new location of chest if current chest is open
-				if (isChestOpen)
+				/*if (isChestOpen)
 				{
 					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
 					isChestOpen = false;
-				}
+				}*/
 				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
 				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			}
@@ -80,14 +79,17 @@ public class PKGameRenderer implements Renderer
 			startTime = System.currentTimeMillis();
 		}
 		
-		if (checkKey){
-			try {
+		/*if (checkKey)
+		{
+			try
+			{
 				PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, keyCode);
 				checkKey = false;
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 			}
-		}
+		}*/
 		
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
@@ -502,21 +504,55 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 	}
 
-	public boolean openChest() throws Exception
+	public String openChest() throws Exception
 	{
-		if (PKEngine.client.getTreasureList()[playerPosition] == 1)
+		OpenChestThread openChestThread = new OpenChestThread();
+		openChestThread.start();
+		while (openChestThread.isAlive()){}
+		return checkChestReply;
+	}
+	
+	private class OpenChestThread extends Thread
+	{
+		public void run()
 		{
-			isChestOpen = true;
-			//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
-			return true;
+			try
+			{
+				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-		return false;
 	}
 
-	public boolean verifyKey(int keyCode)
+	public String verifyKey(int keyCode) throws Exception 
 	{
-		this.keyCode = keyCode;
-		checkKey = true;
-		return false;
+		AddKeyCodeThread addKeyCodeThread = new AddKeyCodeThread(keyCode);
+		addKeyCodeThread.start();
+		while (addKeyCodeThread.isAlive()){}
+
+		return checkKeyReply;
+	}
+
+	private class AddKeyCodeThread extends Thread
+	{
+
+		int keyCode;
+		AddKeyCodeThread(int keyCode)
+		{
+			this.keyCode = keyCode;
+		}
+
+		public void run()
+		{
+			try
+			{
+				checkKeyReply = PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, keyCode);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }

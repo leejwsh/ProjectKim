@@ -78,16 +78,18 @@ public class PKGame extends Activity
 		switch (v.getId())
 		{
 			case R.id.btnOpenChest:
-				boolean hasChest = renderer.openChest();
-				if (hasChest)
+				String chestReply = renderer.openChest();
+				if (chestReply.equalsIgnoreCase("Successful"))
 				{
-					// Testing Message
 					Toast msg = Toast.makeText(PKGame.this, "Successfully Opened!", Toast.LENGTH_SHORT);
+					msg.show();
+				} else if (chestReply.equalsIgnoreCase("NoChest"))
+				{
+					Toast msg = Toast.makeText(PKGame.this, "Are you sure there's a chest here?", Toast.LENGTH_SHORT);
 					msg.show();
 				} else
 				{
-					// Testing Message
-					Toast msg = Toast.makeText(PKGame.this, "Are you sure there's a chest here?", Toast.LENGTH_SHORT);
+					Toast msg = Toast.makeText(PKGame.this, "You have no key. Go look for one!", Toast.LENGTH_SHORT);
 					msg.show();
 				}
 				break;
@@ -165,10 +167,9 @@ public class PKGame extends Activity
 			case R.id.numEnter:
 				if (!keyCode.equalsIgnoreCase(""))
 				{
-					boolean hasKey = renderer.verifyKey(Integer.valueOf(keyCode));
-					if (hasKey)
+					String keyReply = renderer.verifyKey(Integer.valueOf(keyCode));
+					if (keyReply.equalsIgnoreCase("Successful"))
 					{
-						// Testing Message
 						Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
 						msg.show();
 						keypad.setVisibility(View.INVISIBLE);
@@ -177,7 +178,6 @@ public class PKGame extends Activity
 						currentKeyPos = 0;
 					} else
 					{
-						// Testing Message
 						Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
 						msg.show();
 					}
