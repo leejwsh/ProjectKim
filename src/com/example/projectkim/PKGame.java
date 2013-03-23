@@ -75,7 +75,8 @@ public class PKGame extends Activity
 	
 	public void buttonOnClick(View v) throws Exception
 	{
-		switch (v.getId()) {
+		switch (v.getId())
+		{
 			case R.id.btnOpenChest:
 				boolean hasChest = renderer.openChest();
 				if (hasChest)
@@ -106,63 +107,53 @@ public class PKGame extends Activity
 				break;
 			case R.id.num0:
 				addNumber(0,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num1:
 				addNumber(1,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num2:
 				addNumber(2,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num3:
 				addNumber(3,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num4:
 				addNumber(4,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num5:
 				addNumber(5,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num6:
 				addNumber(6,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num7:
 				addNumber(7,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num8:
 				addNumber(8,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.num9:
 				addNumber(9,currentKeyPos);
-				if (currentKeyPos < 4){
+				if (currentKeyPos < 4)
 					currentKeyPos++;
-				}
 				break;
 			case R.id.numDel:
 				if (currentKeyPos > 0)
@@ -172,22 +163,27 @@ public class PKGame extends Activity
 				}
 				break;
 			case R.id.numEnter:
-				if (keyCode.equalsIgnoreCase(""))
-					keyCode = keyCode.concat(String.valueOf(0));
-				boolean hasKey = renderer.verifyKey(Integer.valueOf(keyCode));
-				if (hasKey)
+				if (!keyCode.equalsIgnoreCase(""))
 				{
-					// Testing Message
-					Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
-					msg.show();
-					keypad.setVisibility(View.INVISIBLE);
-					keypadInput.setVisibility(View.INVISIBLE);
-					resetKeyCode();
-					currentKeyPos = 0;
+					boolean hasKey = renderer.verifyKey(Integer.valueOf(keyCode));
+					if (hasKey)
+					{
+						// Testing Message
+						Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
+						msg.show();
+						keypad.setVisibility(View.INVISIBLE);
+						keypadInput.setVisibility(View.INVISIBLE);
+						resetKeyCode();
+						currentKeyPos = 0;
+					} else
+					{
+						// Testing Message
+						Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
+						msg.show();
+					}
 				} else
 				{
-					// Testing Message
-					Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
+					Toast msg = Toast.makeText(PKGame.this, "No code entered!", Toast.LENGTH_SHORT);
 					msg.show();
 				}
 				break;
@@ -196,7 +192,8 @@ public class PKGame extends Activity
 	
 	private void resetKeyCode()
 	{
-		for (int i=0; i<keyInput.length; i++){
+		for (int i=0; i<keyInput.length; i++)
+		{
 			keyInput[i].setImageResource(R.drawable.numblank);
 		}
 		keyCode = "";
