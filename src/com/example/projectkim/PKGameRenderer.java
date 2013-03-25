@@ -197,12 +197,11 @@ public class PKGameRenderer implements Renderer
 	
 	private void checkTreasureLocation()
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < PKEngine.POV_MAP_HEIGHT; i++)
 		{
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < PKEngine.POV_MAP_WIDTH; j++)
 			{
 				PKEngine.treasureLocations[i][j] = PKEngine.client.getTreasureList2D()[i][j];
-				
 			}
 		}
 	}
@@ -399,7 +398,7 @@ public class PKGameRenderer implements Renderer
 					if (PKEngine.treasureLocations[i][j] == 1)
 						drawTreasureChest(gl,
 										  j - playerNewPos.get(0) % PKEngine.POV_MAP_WIDTH + 2,
-										  i - playerNewPos.get(0) / PKEngine.POV_MAP_HEIGHT + 2,
+										  i - playerNewPos.get(0) / PKEngine.POV_MAP_WIDTH + 2,
 										  treasureChestOffset[0],
 										  treasureChestOffset[1]);
 			}
