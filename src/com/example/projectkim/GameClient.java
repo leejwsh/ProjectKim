@@ -8,7 +8,6 @@ package com.example.projectkim;
 
 import java.util.*;
 import java.net.*;
-import java.io.*;
 
 public class GameClient {
 	private final int ROW = 3; // Number of rows of Nodes
@@ -16,7 +15,7 @@ public class GameClient {
 
 	final int N_NUM = 9; // Total number of Nodes
 	final int T_NUM = 3; // Number of treasures on the map
-	final int P_NUM = 2; // Number of players
+	final int P_NUM = 4; // Number of players
 	final int K_NUM = 20; // Number of key codes
 
 	// Event code
@@ -39,8 +38,6 @@ public class GameClient {
 	private int[][] playerList;
 
 	private int[] treasureList; // stores treasure location
-	private int[] keyCodeList; // stores the key codes
-
 	// globalEvent code: Stores the current global game status
 	// 0 = pre-game
 	// 1 = countdown stage, once the first player logon to the server

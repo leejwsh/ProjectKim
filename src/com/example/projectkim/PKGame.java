@@ -81,7 +81,8 @@ public class PKGame extends Activity
 				String chestReply = renderer.openChest();
 				if (chestReply.equalsIgnoreCase("Successful"))
 				{
-					Toast msg = Toast.makeText(PKGame.this, "Successfully Opened!", Toast.LENGTH_SHORT);
+					int newScore = renderer.getScore();
+					Toast msg = Toast.makeText(PKGame.this, "Successfully Opened! You have " + newScore + " gold.", Toast.LENGTH_SHORT);
 					msg.show();
 				} else if (chestReply.equalsIgnoreCase("NoChest"))
 				{

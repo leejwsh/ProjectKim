@@ -28,6 +28,7 @@ public class PKGameRenderer implements Renderer
 	private float[] spriteCoords = new float[2];
 	private String checkKeyReply;
 	private String checkChestReply;
+	private int playerScore;
 	
 	// Variables for rest elements of UI.
 	private PKImage overlayTop = new PKImage(1.0f, 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 1.0f, 1.0f);
@@ -63,12 +64,6 @@ public class PKGameRenderer implements Renderer
 			// Update positions on server.
 			try
 			{
-				// Update new location of chest if current chest is open
-				/*if (isChestOpen)
-				{
-					PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
-					isChestOpen = false;
-				}*/
 				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
 				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			}
@@ -79,29 +74,17 @@ public class PKGameRenderer implements Renderer
 			startTime = System.currentTimeMillis();
 		}
 		
-		/*if (checkKey)
-		{
-			try
-			{
-				PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, keyCode);
-				checkKey = false;
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}*/
-		
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
-		
-		// Update treasure location.
-		checkTreasureLocation();
 		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		// Draw background.
 		//drawBackground(gl);
+		
+		// Updates treasure chest locations.
+		updateTreasureLocation();
 		
 		// Draw PoV map.
 		drawPovMap(gl);
@@ -192,10 +175,13 @@ public class PKGameRenderer implements Renderer
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
 		
 		// Initialisation of treasure locations.
-		checkTreasureLocation();
+		updateTreasureLocation();
+		
+		// Initialisation of player score.
+		playerScore = 0;
 	}
 	
-	private void checkTreasureLocation()
+	private void updateTreasureLocation()
 	{
 		for (int i = 0; i < PKEngine.POV_MAP_HEIGHT; i++)
 		{
@@ -518,11 +504,20 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+				if (checkChestReply.equalsIgnoreCase("Successful"))
+				{
+					playerScore = playerScore + 50;
+					PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, playerScore);
+				}
 			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public int getScore(){
+		return playerScore;
 	}
 
 	public String verifyKey(int keyCode) throws Exception 
