@@ -346,6 +346,13 @@ public class GameClient {
 	public int getPlayerScore(int playerID) {
 		return playerList[playerID][1];
 	}
+	
+	// Returns num of keys of a playerID
+	public int getPlayerKeyNum(int playerID) {
+		return playerList[playerID][2];
+	}
+	
+	
 
 	// Returns player's ranking, example input Ranking (1,2,3,4), output:
 	// PlayerID (0,1,2,3)

@@ -357,7 +357,7 @@ public class TexFont
 	}
 	
 	// Print a line of text to screen at specified co-ords
-	public void PrintAt(GL10 gl, String text, int x, int y)
+	public void PrintAt(GL10 gl, String text, float x, float y)
 	{
 		int glyph, col, row;
 		float xPos = x;

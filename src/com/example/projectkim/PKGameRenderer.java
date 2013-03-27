@@ -1,5 +1,6 @@
 package com.example.projectkim;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -10,7 +11,7 @@ import android.opengl.GLSurfaceView.Renderer;
 public class PKGameRenderer implements Renderer
 {
 	// Variables for text.
-	//private TexFont font;
+	private TexFont font;
 	
 	// Variables for background.
 	private PKImage background = new PKImage();
@@ -29,12 +30,13 @@ public class PKGameRenderer implements Renderer
 	private String checkKeyReply;
 	private String checkChestReply;
 	private int playerScore;
+	private int numKeys;
 	
 	// Variables for rest elements of UI.
 	private PKImage overlayTop = new PKImage(1.0f, 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 1.0f, 1.0f);
 	private PKImage overlayBtm = new PKImage();
-	private PKImage treasureKey = new PKImage(0.1f, 0.1f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.TREASURE_KEY_HEIGHT / PKEngine.TREASURE_KEY_WIDTH, 1.0f, 1.0f);
-	private PKImage goldCoin = new PKImage(0.1f, 0.1f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
+	private PKImage treasureKey = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.TREASURE_KEY_HEIGHT / PKEngine.TREASURE_KEY_WIDTH, 1.0f, 1.0f);
+	private PKImage goldCoin = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMap = new PKImage(0.666f, 0.666f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	
 	// Variables for time.
@@ -77,13 +79,17 @@ public class PKGameRenderer implements Renderer
 		// Update player location.
 		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
 		
+		// Update player stats.
+		playerScore = PKEngine.client.getPlayerScore(PKEngine.PLAYER_ID);
+		numKeys = PKEngine.client.getPlayerKeyNum(PKEngine.PLAYER_ID);
+		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		// Draw background.
 		//drawBackground(gl);
 		
-		// Updates treasure chest locations.
+		// Update treasure chest locations.
 		updateTreasureLocation();
 		
 		// Draw PoV map.
@@ -96,6 +102,8 @@ public class PKGameRenderer implements Renderer
 		drawGoldCoin(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
+		printKeys(gl);
+		printScore(gl);
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -132,17 +140,17 @@ public class PKGameRenderer implements Renderer
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		// Loads fonts
-		//font = new TexFont(PKEngine.context, gl);
-		/*
+		font = new TexFont(PKEngine.context, gl);
+		
 		try
 		{
-			font.LoadFontAlt("visitor.bff", gl);
+			font.LoadFontAlt("digital.bff", gl);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		*/
+		
 		
 		// Load textures.
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
@@ -213,6 +221,22 @@ public class PKGameRenderer implements Renderer
 		//font.PrintAt(gl, "<LOCATION NAME>", (PKEngine.scrWidth - font.GetTextLength("<LOCATION NAME>")) / 2, PKEngine.scrWidth - font.GetTextHeight());
 		//font.PrintAt(gl, "<LOCATION NAME>", 0.5f * (PKEngine.scrWidth - font.GetTextLength("<LOCATION NAME>")), 0.0f);
 		//font.PrintAt(gl, "<LOCATION NAME>", 0.5f, 0.5f);
+	}
+	
+	private void printScore(GL10 gl)
+	{
+		font.SetScale(1.5f);
+		font.PrintAt(gl, String.valueOf(playerScore), 0.13f * PKEngine.scrWidth, 0.025f * PKEngine.scrHeight - font.fntCellHeight);
+		// x = (0.05f + 0.08f) * PKEngine.scrWidth
+		// y = 0.025f * PKEngine.scrHeight
+	}
+
+	private void printKeys(GL10 gl)
+	{
+		font.SetScale(1.5f);
+		font.PrintAt(gl, String.valueOf(numKeys), 0.13f * PKEngine.scrWidth, 0.1f * PKEngine.scrHeight - font.fntCellHeight);
+		// x = (0.05f + 0.08f) * PKEngine.scrWidth
+		// y = 0.1f * PKEngine.scrHeight
 	}
 	
 	private void drawPlayer(GL10 gl)
@@ -504,11 +528,6 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
-				if (checkChestReply.equalsIgnoreCase("Successful"))
-				{
-					playerScore = playerScore + 50;
-					PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, playerScore);
-				}
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -516,7 +535,8 @@ public class PKGameRenderer implements Renderer
 		}
 	}
 	
-	public int getScore(){
+	public int getScore()
+	{
 		return playerScore;
 	}
 
