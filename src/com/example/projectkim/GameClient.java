@@ -1,6 +1,5 @@
 package com.example.projectkim;
-
-/* CS3283 Project
+/* CS3283/CS3284 Project
  * 
  * Game UDP Client: communicates to with server through UDP connections to get informations
  * 
@@ -10,11 +9,12 @@ import java.util.*;
 import java.net.*;
 
 public class GameClient {
-	private final int ROW = 3; // Number of rows of Nodes
-	final int COLUMN = 3; // Number of column of Nodes
+	
+	final int ROW = 4; // Number of rows of Nodes
+	final int COLUMN = 10; // Number of column of Nodes
 
-	final int N_NUM = 9; // Total number of Nodes
-	final int T_NUM = 3; // Number of treasures on the map
+	final int N_NUM = ROW * COLUMN; // Total number of Nodes
+	final int T_NUM = N_NUM / 3; // Number of treasures on the map
 	final int P_NUM = 4; // Number of players
 	final int K_NUM = 20; // Number of key codes
 
@@ -57,6 +57,7 @@ public class GameClient {
 	 */
 
 	final int port = 9001;
+	//final String gameServerAddress = "localhost";
 	final String gameServerAddress = "10.0.2.2";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
@@ -300,33 +301,33 @@ public class GameClient {
 		return reply;
 	}
 
-	// Returns the X position of a playerID
+	/* Returns the X position of a playerID */
 	public int getPlayerX(int playerID) {
 
 		int x = playerLocation[playerID] / COLUMN;
 		return x;
 	}
 
-	// Returns the Y position of a playerID
+	/* Returns the Y position of a playerID */
 	public int getPlayerY(int playerID) {
 
 		int y = playerLocation[playerID] % COLUMN;
 		return y;
 	}
 
-	// Returns the Y position of a playerID
+	/* Returns the Y position of a playerID */
 	public int getPlayerLocation(int playerID) {
 
 		int y = playerLocation[playerID];
 		return y;
 	}
 
-	// Returns a 1D array of treasure info
+	/* Returns a 1D array of treasure info */
 	public int[] getTreasureList() {
 		return treasureList;
 	}
 
-	// Returns a 2D array of treasure info
+	/* Returns a 2D array of treasure info */
 	public int[][] getTreasureList2D() {
 
 		int[][] treasureList2D = new int[ROW][COLUMN];
@@ -337,25 +338,22 @@ public class GameClient {
 		return treasureList2D;
 	}
 
-	// Returns the logon status of playerID
+	/* Returns the logon status of playerID */
 	public boolean getLogonStatus(int playerID) {
 		return playerList[playerID][0] == 1;
 	}
 
-	// Returns current score of a playerID
+	/* Returns current score of a playerID */
 	public int getPlayerScore(int playerID) {
 		return playerList[playerID][1];
 	}
 	
-	// Returns num of keys of a playerID
+	/* Returns the numbers of key held by a player */
 	public int getPlayerKeyNum(int playerID) {
 		return playerList[playerID][2];
 	}
-	
-	
 
-	// Returns player's ranking, example input Ranking (1,2,3,4), output:
-	// PlayerID (0,1,2,3)
+	/*Returns player's ranking, example input Ranking (1,2,3,4), output: PlayerID (0,1,2,3) */
 	public int getPlayerOfGivenRanking(int ranking) {
 		int[] scoreList = new int[P_NUM];
 		int[] tempList = new int[P_NUM];
@@ -387,7 +385,7 @@ public class GameClient {
 		return tempList[ranking - 1];
 	}
 
-	// Returns player's ranking, example input PlayerID (0,1,2,3), output: Ranking (1,2,3,4)
+	/* Returns player's ranking, example input PlayerID (0,1,2,3), output: Ranking (1,2,3,4) */
 	public int getRankingOfGivenPlayer(int PlayerID) {
 		int[] scoreList = new int[P_NUM];
 		int[] tempList = new int[P_NUM];
@@ -424,13 +422,14 @@ public class GameClient {
 		return tempList2[PlayerID];
 	}
 
-	// Returns the global event status of the game.
+	/* Returns the global event status of the game */
 	public int getGlobalEventStatus() {
 		return globalEvent;
 	}
 
-	// Closes the UDP socket
+	/* Closes the UDP socket */
 	public void closeSocket() {
 		socket.close();
 	}
+	
 }

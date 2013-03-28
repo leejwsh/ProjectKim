@@ -29,13 +29,13 @@ public class PKEngine
 	public static final int BACKGROUND_LAYER_ONE = R.drawable.background;
 	
 	// Constants for PoV map.
-	public static final int POV_MAP = R.drawable.povmap;
-	//public static final int POV_MAP = R.drawable.map2;
+	//public static final int POV_MAP = R.drawable.povmap;
+	public static final int POV_MAP = R.drawable.map;
 	public static final int TREASURE_CHEST = R.drawable.chest;
-	public static final int POV_MAP_WIDTH = 3;
-	//public static final int POV_MAP_WIDTH = 9;
-	public static final int POV_MAP_HEIGHT = 3;
-	//public static final int POV_MAP_HEIGHT = 4;
+	//public static final int POV_MAP_WIDTH = 3;
+	public static final int POV_MAP_WIDTH = 10;
+	//public static final int POV_MAP_HEIGHT = 3;
+	public static final int POV_MAP_HEIGHT = 4;
 	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
 													3.0f / (POV_MAP_WIDTH + 2), 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
 													3.0f / (POV_MAP_WIDTH + 2), 1.0f,
