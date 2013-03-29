@@ -9,7 +9,7 @@ import java.util.*;
 import java.net.*;
 
 public class GameClient {
-	
+
 	final int ROW = 4; // Number of rows of Nodes
 	final int COLUMN = 10; // Number of column of Nodes
 
@@ -24,7 +24,7 @@ public class GameClient {
 	final int mapUpdateEvent = 2;
 	final int openTreasureEvent = 3;
 	final int scoreUpdateEvent = 4;
-	final int addKeyEvent = 5;
+	final int addKeyCodeEvent = 5;
 	final int endOfGameEvent = 6;
 
 	final int timeOutDuration = 500;
@@ -45,7 +45,7 @@ public class GameClient {
 	// 3 = falling coins starts
 	// 4 = falling coins ends
 	// 5 = game end
-	private int globalEvent;
+	private int globalEventStatus;
 
 	private static int[] playerLocation;
 
@@ -62,14 +62,17 @@ public class GameClient {
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 
+	/* Constructor */
 	public GameClient() throws Exception {
 		randomGenerator = new Random();
 		initializeSocket();
 		initializeTreasureList();
 		initializePlayerList();
 		initializePlayerLocation();
-		globalEvent = 0;
+		globalEventStatus = 0;
 	}
+
+	/* Various initializations */
 
 	private void initializeSocket() throws Exception {
 		socket = new DatagramSocket();
@@ -98,6 +101,7 @@ public class GameClient {
 			playerLocation[i] = 0;
 	}
 
+	/* Game Server's loginEvent reply format: Failure or Successful or AlreadyLogon */
 	public String loginEvent(int playerID) throws Exception {
 
 		/*
@@ -130,11 +134,10 @@ public class GameClient {
 		System.out.println(reply + " [loginEvent: GameClient.java]");
 		/* End of UDP protocol */
 
-		// Game Server's loginEvent reply format: Failure or Successful or
-		// Already Logon
 		return reply;
 	}
 
+	/* Primary event to be called by android game client at a fixed interval */
 	public void mapUpdateEvent(int playerID) throws Exception {
 
 		/*
@@ -188,9 +191,10 @@ public class GameClient {
 			treasureList[i] = Integer.parseInt(requestToken.nextToken());
 
 		// Update global event
-		globalEvent = Integer.parseInt(requestToken.nextToken());
+		globalEventStatus = Integer.parseInt(requestToken.nextToken());
 	}
 
+	/* Game Server's openTreasureEvent reply format: NoChest, NoKey or Successful */
 	public String openTreasureEvent(int playerID) throws Exception {
 
 		/*
@@ -224,10 +228,10 @@ public class GameClient {
 		System.out.println(reply + " [openTreasureEvent: GameClient.java]");
 		/* End of UDP protocol */
 
-		// Game Server's openTreasureEvent reply format: Failure or Successful
 		return reply;
 	}
 
+	/* Game Server's scoreUpdateEvent reply format: Failure or Successful */
 	public String scoreUpdateEvent(int playerID, int newScore) throws Exception {
 
 		/*
@@ -260,17 +264,17 @@ public class GameClient {
 		System.out.println(reply + " [scoreUpdateEvent: GameClient.java]");
 		/* End of UDP protocol */
 
-		// Game Server's scoreUpdateEvent reply format: Failure or Successful
 		return reply;
 	}
 
-	public String addKeyEvent(int playerID, int keyCode) throws Exception {
+	/* Game Server's addKeyCodeEvent reply format: InvalidKeyCode, InvalidLocation, KeyCodeUsed, Successful */
+	public String addKeyCodeEvent(int playerID, int keyCode) throws Exception {
 
 		/*
 		 * Use DataGramSocket for UDP connection convert string "request" to
 		 * array of bytes, suitable for creation of DatagramPacket
 		 */
-		String request = addKeyEvent + ";" + playerID + ";" + keyCode;
+		String request = addKeyCodeEvent + ";" + playerID + ";" + keyCode;
 
 		/* Start of UDP protocol */
 		byte outgoingBuffer[] = request.getBytes();
@@ -296,28 +300,23 @@ public class GameClient {
 		System.out.println(reply + " [addKeyEvent: GameClient.java]");
 		/* End of UDP protocol */
 
-		// Game Server's openTreasureEvent reply format: NoChest, NoKey or
-		// Successful
 		return reply;
 	}
 
 	/* Returns the X position of a playerID */
 	public int getPlayerX(int playerID) {
-
 		int x = playerLocation[playerID] / COLUMN;
 		return x;
 	}
 
 	/* Returns the Y position of a playerID */
 	public int getPlayerY(int playerID) {
-
 		int y = playerLocation[playerID] % COLUMN;
 		return y;
 	}
 
 	/* Returns the Y position of a playerID */
 	public int getPlayerLocation(int playerID) {
-
 		int y = playerLocation[playerID];
 		return y;
 	}
@@ -329,12 +328,9 @@ public class GameClient {
 
 	/* Returns a 2D array of treasure info */
 	public int[][] getTreasureList2D() {
-
 		int[][] treasureList2D = new int[ROW][COLUMN];
-
 		for (int i = 0; i < N_NUM; i++)
 			treasureList2D[i / COLUMN][i % COLUMN] = treasureList[i];
-
 		return treasureList2D;
 	}
 
@@ -347,13 +343,13 @@ public class GameClient {
 	public int getPlayerScore(int playerID) {
 		return playerList[playerID][1];
 	}
-	
+
 	/* Returns the numbers of key held by a player */
 	public int getPlayerKeyNum(int playerID) {
 		return playerList[playerID][2];
 	}
 
-	/*Returns player's ranking, example input Ranking (1,2,3,4), output: PlayerID (0,1,2,3) */
+	/* Returns player's ranking, example input Ranking (1,2,3,4), output: PlayerID (0,1,2,3) */
 	public int getPlayerOfGivenRanking(int ranking) {
 		int[] scoreList = new int[P_NUM];
 		int[] tempList = new int[P_NUM];
@@ -424,12 +420,12 @@ public class GameClient {
 
 	/* Returns the global event status of the game */
 	public int getGlobalEventStatus() {
-		return globalEvent;
+		return globalEventStatus;
 	}
 
 	/* Closes the UDP socket */
 	public void closeSocket() {
 		socket.close();
 	}
-	
+
 }

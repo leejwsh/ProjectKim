@@ -43,8 +43,6 @@ public class PKGameRenderer implements Renderer
 	private long loopStart = 0;
 	private long loopEnd = 0;
 	private long loopRunTime = 0;
-	
-	// testing
 	private long startTime = 0;
 	
 	@Override
@@ -141,7 +139,6 @@ public class PKGameRenderer implements Renderer
 		
 		// Loads fonts
 		font = new TexFont(PKEngine.context, gl);
-		
 		try
 		{
 			font.LoadFontAlt("digital.bff", gl);
@@ -150,7 +147,6 @@ public class PKGameRenderer implements Renderer
 		{
 			e.printStackTrace();
 		}
-		
 		
 		// Load textures.
 		background.loadTexture(gl, PKEngine.BACKGROUND_LAYER_ONE, PKEngine.context, GL10.GL_REPEAT);
@@ -562,7 +558,7 @@ public class PKGameRenderer implements Renderer
 		{
 			try
 			{
-				checkKeyReply = PKEngine.client.addKeyEvent(PKEngine.PLAYER_ID, keyCode);
+				checkKeyReply = PKEngine.client.addKeyCodeEvent(PKEngine.PLAYER_ID, keyCode);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
