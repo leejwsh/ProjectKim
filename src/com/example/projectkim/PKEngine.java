@@ -29,13 +29,10 @@ public class PKEngine
 	public static final int BACKGROUND_LAYER_ONE = R.drawable.background;
 	
 	// Constants for PoV map.
-	//public static final int POV_MAP = R.drawable.map2;
-	public static final int POV_MAP = R.drawable.map;
+	public static final int POV_MAP = R.drawable.map2;
 	public static final int TREASURE_CHEST = R.drawable.chest;
-	//public static final int POV_MAP_WIDTH = 14;
-	public static final int POV_MAP_WIDTH = 10;
-	//public static final int POV_MAP_HEIGHT = 7;
-	public static final int POV_MAP_HEIGHT = 4;
+	public static final int POV_MAP_WIDTH = 14;
+	public static final int POV_MAP_HEIGHT = 7;
 	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
 													3.0f / (POV_MAP_WIDTH + 2), 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
 													3.0f / (POV_MAP_WIDTH + 2), 1.0f,
@@ -76,13 +73,12 @@ public class PKEngine
 	public static final int GOLD_COIN_HEIGHT = 52;
 	
 	// Constants for mini map.
-	public static final int MINI_MAP = R.drawable.map;
-	public static final int MINI_MAP_WIDTH = 1200;
-	public static final int MINI_MAP_HEIGHT = 600;
-	public static final float MINI_MAP_SCALE = 0.666f;
-	public static final float MINI_MAP_X_OFFSET = -0.033f; // Translate mini map right by OFFSET.
-	//public static final float MINI_MAP_Y_OFFSET = 0.025f; // Translate mini map up by OFFSET.
-	public static final float MINI_MAP_Y_OFFSET = 0.0f; // Translate mini map up by OFFSET.
+	public static final int MINI_MAP = R.drawable.map2;
+	public static final int MINI_MAP_WIDTH = 1600;
+	public static final int MINI_MAP_HEIGHT = 900;
+	public static final float MINI_MAP_SCALE = 0.63f;
+	public static final float MINI_MAP_X_OFFSET = -0.05f; // Translate mini map right by OFFSET.
+	public static final float MINI_MAP_Y_OFFSET = 0.01f; // Translate mini map up by OFFSET.
 	public static final float MINI_MAP_GRID_SIZE = MINI_MAP_SCALE / (POV_MAP_WIDTH + 2);
 	public static final int MINI_MAP_MARKER = R.drawable.minimap_cross;
 	public static final int MINI_MAP_MARKER_WIDTH = 100;

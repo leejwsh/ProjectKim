@@ -501,7 +501,9 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 0.333f, PKEngine.MINI_MAP_Y_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 0.0f);
+		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE,
+						PKEngine.MINI_MAP_Y_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH,
+						0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
@@ -514,7 +516,7 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 0.333f + PKEngine.MINI_MAP_GRID_SIZE,
+		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE + PKEngine.MINI_MAP_GRID_SIZE,
 						PKEngine.MINI_MAP_Y_OFFSET + 1.0f - 2.0f * PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight,
 						0.0f); // Translate marker to position 0 of map.
 		gl.glTranslatef(playerPosition % PKEngine.POV_MAP_WIDTH * PKEngine.MINI_MAP_GRID_SIZE,
