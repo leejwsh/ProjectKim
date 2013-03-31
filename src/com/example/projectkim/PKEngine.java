@@ -74,9 +74,19 @@ public class PKEngine
 	public static final int GOLD_COIN = R.drawable.ingame_statscoinicon;
 	public static final int GOLD_COIN_WIDTH = 66;
 	public static final int GOLD_COIN_HEIGHT = 52;
-	public static final int MINI_MAP = R.drawable.ingame_minimap;
-	public static final int MINI_MAP_WIDTH = 532;
-	public static final int MINI_MAP_HEIGHT = 222;
+	
+	// Constants for mini map.
+	public static final int MINI_MAP = R.drawable.map;
+	public static final int MINI_MAP_WIDTH = 1200;
+	public static final int MINI_MAP_HEIGHT = 600;
+	public static final float MINI_MAP_SCALE = 0.666f;
+	public static final float MINI_MAP_X_OFFSET = -0.033f; // Translate mini map right by OFFSET.
+	//public static final float MINI_MAP_Y_OFFSET = 0.025f; // Translate mini map up by OFFSET.
+	public static final float MINI_MAP_Y_OFFSET = 0.0f; // Translate mini map up by OFFSET.
+	public static final float MINI_MAP_GRID_SIZE = MINI_MAP_SCALE / (POV_MAP_WIDTH + 2);
+	public static final int MINI_MAP_MARKER = R.drawable.minimap_cross;
+	public static final int MINI_MAP_MARKER_WIDTH = 100;
+	public static final int MINI_MAP_MARKER_HEIGHT = 100;
 	
 	// Variables for connection to server.
 	public static GameClient client;

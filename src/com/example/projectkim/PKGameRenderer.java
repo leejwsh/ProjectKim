@@ -37,7 +37,8 @@ public class PKGameRenderer implements Renderer
 	private PKImage overlayBtm = new PKImage();
 	private PKImage treasureKey = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.TREASURE_KEY_HEIGHT / PKEngine.TREASURE_KEY_WIDTH, 1.0f, 1.0f);
 	private PKImage goldCoin = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
-	private PKImage miniMap = new PKImage(0.666f, 0.666f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
+	private PKImage miniMap = new PKImage(PKEngine.MINI_MAP_SCALE, PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
+	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
 	
 	// Variables for time.
 	private long loopStart = 0;
@@ -158,6 +159,7 @@ public class PKGameRenderer implements Renderer
 		treasureKey.loadTexture(gl, PKEngine.TREASURE_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		goldCoin.loadTexture(gl, PKEngine.GOLD_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// testing
 		startTime = System.currentTimeMillis();
@@ -499,12 +501,30 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glPushMatrix();
-		gl.glTranslatef(0.3f, 0.75f + 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * (0.25f - 0.33f * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH), 0.0f);
+		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 0.333f, PKEngine.MINI_MAP_Y_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 0.0f);
 		
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
 		miniMap.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
+		
+		// Draw mini map marker.
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 0.333f + PKEngine.MINI_MAP_GRID_SIZE,
+						PKEngine.MINI_MAP_Y_OFFSET + 1.0f - 2.0f * PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight,
+						0.0f); // Translate marker to position 0 of map.
+		gl.glTranslatef(playerPosition % PKEngine.POV_MAP_WIDTH * PKEngine.MINI_MAP_GRID_SIZE,
+						-playerPosition / PKEngine.POV_MAP_WIDTH * PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight,
+						0.0f); // Translate marker to player position.
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		miniMapMarker.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}

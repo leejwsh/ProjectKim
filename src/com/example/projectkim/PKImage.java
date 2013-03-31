@@ -58,9 +58,9 @@ public class PKImage
 		{
 			switch (i % 2)
 			{
-				case 0: vertices[i] *= texXScale;
+				case 0: texture[i] *= texXScale;
 						break;
-				case 1: vertices[i] *= texYScale;
+				case 1: texture[i] *= texYScale;
 						break;
 			}
 		}
