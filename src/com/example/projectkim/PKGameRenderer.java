@@ -11,7 +11,7 @@ import android.opengl.GLSurfaceView.Renderer;
 public class PKGameRenderer implements Renderer
 {
 	// Variables for text.
-	private TexFont font;
+	private TexFont font, timerFont;
 	
 	// Variables for background.
 	private PKImage background = new PKImage();
@@ -45,6 +45,11 @@ public class PKGameRenderer implements Renderer
 	private long loopEnd = 0;
 	private long loopRunTime = 0;
 	private long startTime = 0;
+	private long countdownPlayerJoinTime = 0;
+	private long gameTimer = 0;
+	private int gameTimeElapsed = 0;
+	private boolean startGameTimer = false;
+	private boolean startLoginTimer = false;
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -60,12 +65,41 @@ public class PKGameRenderer implements Renderer
 			e.printStackTrace();
 		}
 		
-		if (System.currentTimeMillis() - startTime > 2000)
+		// globalEvent code: Stores the current global game status
+		// 0 = pre-game
+		// 1 = countdown stage, once the first player logon to the server
+		// 2 = game starts
+		// 3 = falling coins starts
+		// 4 = falling coins ends
+		// 5 = game end
+		
+		// Updates current Event
+		System.out.println(PKEngine.client.getGlobalEventStatus()  + "");
+		switch (PKEngine.client.getGlobalEventStatus())
+		{
+			case 1:
+				// TODO: starts loginTimer (gets from server)
+				if (!startLoginTimer)
+					startLoginTimer = true;
+				break;
+			case 2:
+				// starts gameTimer
+				if (!startGameTimer)
+				{
+					startLoginTimer = false;
+					startGameTimer = true;
+					gameTimer = System.currentTimeMillis();
+				}
+				break;
+		}
+		
+		if (System.currentTimeMillis() - startTime >= 1000)
 		{
 			// Update positions on server.
 			try
 			{
 				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+				System.out.println(PKEngine.client.getGlobalEventStatus()  + "");
 				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			}
 			catch (Exception e)
@@ -103,6 +137,10 @@ public class PKGameRenderer implements Renderer
 		printLocationName(gl);
 		printKeys(gl);
 		printScore(gl);
+		if (startLoginTimer)
+			printLoginTimer(gl);
+		if (startGameTimer)
+			printGameTime(gl);
 		
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -140,9 +178,11 @@ public class PKGameRenderer implements Renderer
 		
 		// Loads fonts
 		font = new TexFont(PKEngine.context, gl);
+		timerFont = new TexFont(PKEngine.context, gl);
 		try
 		{
 			font.LoadFontAlt("digital.bff", gl);
+			timerFont.LoadFontAlt("vintageone.bff", gl);
 		}
 		catch (IOException e)
 		{
@@ -164,10 +204,11 @@ public class PKGameRenderer implements Renderer
 		// testing
 		startTime = System.currentTimeMillis();
 		
-		// Initialise positions on server.
+		// Initialise position and player on server.
 		try
 		{
 			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+			PKEngine.client.loginEvent(PKEngine.PLAYER_ID);
 		}
 		catch (Exception e)
 		{
@@ -235,6 +276,22 @@ public class PKGameRenderer implements Renderer
 		font.PrintAt(gl, String.valueOf(numKeys), 0.13f * PKEngine.scrWidth, 0.1f * PKEngine.scrHeight - font.fntCellHeight);
 		// x = (0.05f + 0.08f) * PKEngine.scrWidth
 		// y = 0.1f * PKEngine.scrHeight
+	}
+	
+	private void printGameTime(GL10 gl)
+	{
+		if (System.currentTimeMillis() - gameTimer >= 1000)
+		{
+			gameTimeElapsed = gameTimeElapsed + 1;
+			gameTimer = System.currentTimeMillis();
+		}
+		timerFont.SetScale(3.0f);
+		timerFont.PrintAt(gl, String.valueOf(PKEngine.GAME_DURATION - gameTimeElapsed), 0.07f * PKEngine.scrWidth, 0.8f * PKEngine.scrHeight - font.fntCellHeight);
+	}
+	
+	private void printLoginTimer(GL10 gl) {
+		timerFont.SetScale(3.0f);
+		timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getcurrentCountdownTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
 	}
 	
 	private void drawPlayer(GL10 gl)
