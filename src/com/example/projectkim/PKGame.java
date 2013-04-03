@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class PKGame extends Activity
 	private TableLayout keypad, keypadInput;
 	private ImageButton num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
 	private ImageButton[] keyInput = new ImageButton[4];
+	private ImageView mascot;
 	private int[] numbers = new int[10];
 	private String keyCode = "";
 	private int currentKeyPos;
@@ -41,6 +43,8 @@ public class PKGame extends Activity
 		Button openChest = (Button)findViewById(R.id.btnOpenChest);
 		openChest.setVisibility(View.VISIBLE);
 		openChest.setBackgroundColor(Color.TRANSPARENT);
+		
+		mascot = (ImageView)findViewById(R.id.mascot);
 		
 		keypad = (TableLayout)findViewById(R.id.keypad);
 		keypadInput = (TableLayout)findViewById(R.id.keypadInput);
@@ -90,6 +94,7 @@ public class PKGame extends Activity
 					msg.show();
 				} else
 				{
+					mascot.setImageResource(R.drawable.mascot_nokey);
 					Toast msg = Toast.makeText(PKGame.this, "You have no key. Go look for one!", Toast.LENGTH_SHORT);
 					msg.show();
 				}

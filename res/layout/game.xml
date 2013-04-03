@@ -155,4 +155,13 @@
 			</ImageButton>
 	    </TableRow>
     </TableLayout>
+
+	<ImageView
+	    android:id="@+id/mascot"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:src="@drawable/mascot" />
+
 </RelativeLayout>
