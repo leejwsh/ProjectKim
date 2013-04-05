@@ -33,6 +33,7 @@ public class GameClient {
 	int fallingCoinsDurations = 6;
 	int totalGameDurations = 30;
 	int currentCountdownTime = countdownDurations;
+	int rebootDurations = 5;
 	
 	Random randomGenerator;
 
@@ -51,6 +52,7 @@ public class GameClient {
 	// 3 = falling coins starts
 	// 4 = falling coins ends
 	// 5 = game end
+	// 6 = server rebooting, Android gameclient DO NOT need to care about this
 	private int globalEventStatus;
 
 	private static int[] playerLocation;
@@ -65,7 +67,8 @@ public class GameClient {
 	final int port = 9001;
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "localhost";
-	final String gameServerAddress = "10.0.2.2";
+	final String gameServerAddress = "172.28.179.134";
+	//final String gameServerAddress = "10.0.2.2";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 	

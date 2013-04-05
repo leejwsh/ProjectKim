@@ -39,6 +39,7 @@ public class PKGameRenderer implements Renderer
 	private PKImage goldCoin = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMap = new PKImage(PKEngine.MINI_MAP_SCALE, PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
+	private PKImage mascot = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	
 	// Variables for time.
 	private long loopStart = 0;
@@ -200,6 +201,7 @@ public class PKGameRenderer implements Renderer
 		goldCoin.loadTexture(gl, PKEngine.GOLD_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		mascot.loadTexture(gl, PKEngine.MASCOT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// testing
 		startTime = System.currentTimeMillis();
@@ -285,8 +287,13 @@ public class PKGameRenderer implements Renderer
 			gameTimeElapsed = gameTimeElapsed + 1;
 			gameTimer = System.currentTimeMillis();
 		}
-		timerFont.SetScale(3.0f);
-		timerFont.PrintAt(gl, String.valueOf(PKEngine.GAME_DURATION - gameTimeElapsed), 0.07f * PKEngine.scrWidth, 0.8f * PKEngine.scrHeight - font.fntCellHeight);
+		
+		int timeFromServer = PKEngine.GAME_DURATION - gameTimeElapsed;
+		
+		int minutes = timeFromServer / 60;
+		int seconds = timeFromServer % 60;
+		timerFont.SetScale(2.0f);
+		timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.07f * PKEngine.scrWidth, 0.8f * PKEngine.scrHeight - font.fntCellHeight);
 	}
 	
 	private void printLoginTimer(GL10 gl) {
@@ -516,6 +523,18 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 		
 		overlayBtm.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
+		
+		// Draw mascot.
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		mascot.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}

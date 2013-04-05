@@ -71,6 +71,9 @@ public class PKEngine
 	public static final int GOLD_COIN = R.drawable.ingame_statscoinicon;
 	public static final int GOLD_COIN_WIDTH = 66;
 	public static final int GOLD_COIN_HEIGHT = 52;
+	public static final int MASCOT = R.drawable.mascot;
+	public static final int MASCOT_WIDTH = 800;
+	public static final int MASCOT_HEIGHT = 360;
 	public static final int GAME_DURATION = 30;
 	
 	// Constants for mini map.

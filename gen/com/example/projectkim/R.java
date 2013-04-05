@@ -76,8 +76,7 @@ public final class R {
         public static final int keypad=0x7f080009;
         public static final int keypadInput=0x7f080004;
         public static final int mainMenuImage=0x7f080000;
-        public static final int mascot=0x7f080016;
-        public static final int menu_settings=0x7f080018;
+        public static final int menu_settings=0x7f080017;
         public static final int num0=0x7f080014;
         public static final int num1=0x7f08000a;
         public static final int num2=0x7f08000b;
@@ -90,7 +89,7 @@ public final class R {
         public static final int num9=0x7f080012;
         public static final int numDel=0x7f080013;
         public static final int numEnter=0x7f080015;
-        public static final int splashScreenImage=0x7f080017;
+        public static final int splashScreenImage=0x7f080016;
     }
     public static final class layout {
         public static final int activity_project_kim=0x7f030000;

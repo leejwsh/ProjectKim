@@ -1,5 +1,6 @@
 package com.example.projectkim;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -23,7 +25,6 @@ public class PKGame extends Activity
 	private TableLayout keypad, keypadInput;
 	private ImageButton num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
 	private ImageButton[] keyInput = new ImageButton[4];
-	private ImageView mascot;
 	private int[] numbers = new int[10];
 	private String keyCode = "";
 	private int currentKeyPos;
@@ -44,7 +45,15 @@ public class PKGame extends Activity
 		openChest.setVisibility(View.VISIBLE);
 		openChest.setBackgroundColor(Color.TRANSPARENT);
 		
-		mascot = (ImageView)findViewById(R.id.mascot);
+		Button addKey = (Button)findViewById(R.id.btnKey);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+		params.leftMargin = 0;
+		params.rightMargin = (int) (PKEngine.scrWidth * 0.82f);
+		params.topMargin = (int) (PKEngine.scrHeight * 0.78f);
+		params.bottomMargin = (int) (PKEngine.scrHeight * 0.07f);
+		addKey.setLayoutParams(params);
+		addKey.setVisibility(View.VISIBLE);
+		addKey.setBackgroundColor(Color.TRANSPARENT);
 		
 		keypad = (TableLayout)findViewById(R.id.keypad);
 		keypadInput = (TableLayout)findViewById(R.id.keypadInput);
@@ -94,7 +103,6 @@ public class PKGame extends Activity
 					msg.show();
 				} else
 				{
-					mascot.setImageResource(R.drawable.mascot_nokey);
 					Toast msg = Toast.makeText(PKGame.this, "You have no key. Go look for one!", Toast.LENGTH_SHORT);
 					msg.show();
 				}
@@ -259,7 +267,7 @@ public class PKGame extends Activity
 		gameView.onResume();
 	}
 
-	@Override
+/*	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		float x = event.getX();
@@ -324,7 +332,7 @@ public class PKGame extends Activity
 		}
 		
 		return false;
-	}
+	}*/
 
 	@Override
 	public void onBackPressed()
