@@ -293,7 +293,7 @@ public class PKGameRenderer implements Renderer
 		int minutes = timeFromServer / 60;
 		int seconds = timeFromServer % 60;
 		timerFont.SetScale(2.0f);
-		timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.07f * PKEngine.scrWidth, 0.8f * PKEngine.scrHeight - font.fntCellHeight);
+		timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - timerFont.fntCellHeight);
 	}
 	
 	private void printLoginTimer(GL10 gl) {
