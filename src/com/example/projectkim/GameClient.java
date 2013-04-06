@@ -28,11 +28,12 @@ public class GameClient {
 	final int endOfGameEvent = 6;
 
 	// Various event durations (seconds)
-	int countdownDurations = 6;
-	int beforeFallingCoinsDurations = 6;
-	int fallingCoinsDurations = 6;
-	int totalGameDurations = 30;
-	int currentCountdownTime = countdownDurations;
+	int totalcountdownDurations = 10;
+	int beforeFallingCoinsDurations = 10;
+	int fallingCoinsDurations = 10;
+	int totalGameDurations = 60;
+	int currentPreGameTime = totalcountdownDurations;
+	int currentInGameTime = totalGameDurations;
 	int rebootDurations = 5;
 	
 	Random randomGenerator;
@@ -67,8 +68,7 @@ public class GameClient {
 	final int port = 9001;
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "localhost";
-	final String gameServerAddress = "172.28.179.134";
-	//final String gameServerAddress = "10.0.2.2";
+	final String gameServerAddress = "10.0.2.2";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 	
@@ -148,7 +148,12 @@ public class GameClient {
 		return reply;
 	}
 
+	
 	/* Primary event to be called by android game client at a fixed interval */
+	/*
+	 * Return player's game info upon request p1 logon status, p1 score, p1
+	 * keys, p1 location, p2 ... pP_NUM, treasure0,1,2,3 ... N_NUM, globalEventStatus, preGameCountdownTime, inGameCountdownTime
+	 */
 	public void mapUpdateEvent(int playerID) throws Exception {
 
 		/*
@@ -203,7 +208,8 @@ public class GameClient {
 
 		// Update global event
 		globalEventStatus = Integer.parseInt(requestToken.nextToken());
-		currentCountdownTime =  Integer.parseInt(requestToken.nextToken());
+		currentPreGameTime = Integer.parseInt(requestToken.nextToken());
+		currentInGameTime = Integer.parseInt(requestToken.nextToken());
 	}
 
 	/* Game Server's openTreasureEvent reply format: NoChest, NoKey or Successful */
@@ -435,8 +441,12 @@ public class GameClient {
 		return globalEventStatus;
 	}
 	
-	public int getcurrentCountdownTime(){
-		return currentCountdownTime;
+	public int getCurrentPreGameTime(){
+		return currentPreGameTime;
+	}
+	
+	public int getcurrentInGameTime(){
+		return currentInGameTime;
 	}
 
 	/* Closes the UDP socket */

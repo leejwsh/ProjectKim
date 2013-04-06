@@ -51,6 +51,7 @@ public class PKGameRenderer implements Renderer
 	private int gameTimeElapsed = 0;
 	private boolean startGameTimer = false;
 	private boolean startLoginTimer = false;
+	private boolean startFallingCoinTimer = false;
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -68,10 +69,10 @@ public class PKGameRenderer implements Renderer
 		
 		// globalEvent code: Stores the current global game status
 		// 0 = pre-game
-		// 1 = countdown stage, once the first player logon to the server
-		// 2 = game starts
-		// 3 = falling coins starts
-		// 4 = falling coins ends
+		// 1 = countdown stage, once the first player logon to the server // 10
+		// 2 = game starts // total game duration = 60 sec
+		// 3 = falling coins starts // 10 sec mark
+		// 4 = falling coins ends // 10 sec duration
 		// 5 = game end
 		
 		// Updates current Event
@@ -79,7 +80,6 @@ public class PKGameRenderer implements Renderer
 		switch (PKEngine.client.getGlobalEventStatus())
 		{
 			case 1:
-				// TODO: starts loginTimer (gets from server)
 				if (!startLoginTimer)
 					startLoginTimer = true;
 				break;
@@ -92,6 +92,11 @@ public class PKGameRenderer implements Renderer
 					gameTimer = System.currentTimeMillis();
 				}
 				break;
+			case 3:
+				if (!startFallingCoinTimer)
+				{
+					startFallingCoinTimer = true;
+				}
 		}
 		
 		if (System.currentTimeMillis() - startTime >= 1000)
@@ -282,13 +287,13 @@ public class PKGameRenderer implements Renderer
 	
 	private void printGameTime(GL10 gl)
 	{
-		if (System.currentTimeMillis() - gameTimer >= 1000)
+/*		if (System.currentTimeMillis() - gameTimer >= 1000)
 		{
 			gameTimeElapsed = gameTimeElapsed + 1;
 			gameTimer = System.currentTimeMillis();
-		}
+		}*/
 		
-		int timeFromServer = PKEngine.GAME_DURATION - gameTimeElapsed;
+		int timeFromServer = PKEngine.client.getcurrentInGameTime();
 		
 		int minutes = timeFromServer / 60;
 		int seconds = timeFromServer % 60;
@@ -298,7 +303,7 @@ public class PKGameRenderer implements Renderer
 	
 	private void printLoginTimer(GL10 gl) {
 		timerFont.SetScale(3.0f);
-		timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getcurrentCountdownTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
+		timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
 	}
 	
 	private void drawPlayer(GL10 gl)
