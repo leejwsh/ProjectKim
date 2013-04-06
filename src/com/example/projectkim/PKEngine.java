@@ -30,7 +30,10 @@ public class PKEngine
 	
 	// Constants for PoV map.
 	public static final int POV_MAP = R.drawable.map2;
-	public static final int TREASURE_CHEST = R.drawable.chest;
+	public static final int TREASURE_CHEST_CLOSED = R.drawable.chest;
+	public static final int ADD_GOLD = R.drawable.chest_gold;
+	public static final int ADD_GOLD_WIDTH = 75;
+	public static final int ADD_GOLD_HEIGHT = 50;
 	public static final int POV_MAP_WIDTH = 14;
 	public static final int POV_MAP_HEIGHT = 7;
 	public static final float POV_MAP_TEXTURE[] = { 0.0f, 1.0f - 3.0f / (POV_MAP_HEIGHT + 2),
@@ -74,6 +77,7 @@ public class PKEngine
 	public static final int MASCOT = R.drawable.mascot;
 	public static final int MASCOT_WIDTH = 800;
 	public static final int MASCOT_HEIGHT = 360;
+	public static final int MASCOT_OPEN_CHEST_SUCCESS = R.drawable.mascot_open_success;
 	public static final int GAME_DURATION = 30;
 	
 	// Constants for mini map.

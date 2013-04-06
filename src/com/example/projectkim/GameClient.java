@@ -3,6 +3,7 @@
  * Game UDP Client: communicates to with server through UDP connections to get informations
  * 
  */
+
 package com.example.projectkim;
 
 import java.util.*;
@@ -67,7 +68,7 @@ public class GameClient {
 
 	final int port = 9001;
 	final int timeOutDuration = 500;
-	//final String gameServerAddress = "localhost";
+	//final String gameServerAddress = "192.168.1.217";
 	final String gameServerAddress = "10.0.2.2";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
@@ -441,11 +442,13 @@ public class GameClient {
 		return globalEventStatus;
 	}
 	
+	/* Returns the current pre-game time of the game */
 	public int getCurrentPreGameTime(){
 		return currentPreGameTime;
 	}
 	
-	public int getcurrentInGameTime(){
+	/* Returns the current  in game time of the game */
+	public int getCurrentInGameTime(){
 		return currentInGameTime;
 	}
 

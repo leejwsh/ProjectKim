@@ -19,10 +19,12 @@ public class PKGameRenderer implements Renderer
 	// Variables for PoV map.
 	private PKImage povMap = new PKImage(PKEngine.POV_MAP_TEXTURE);
 	private PKImage treasureChest = new PKImage();
+	private PKImage addGold = new PKImage(0.2f, 0.2f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.ADD_GOLD_HEIGHT / PKEngine.ADD_GOLD_WIDTH, 1.0f, 1.0f);
 	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
 	private int playerPosition = 0;
 	private ArrayList<Integer> playerNewPos = new ArrayList<Integer>();
 	private boolean animStart = false;
+	private boolean addChestScore = false;
 	private int animRunTime = 0;
 	private float[] povMapCoords = new float[2];
 	private float[] treasureChestOffset = new float[2];
@@ -40,15 +42,14 @@ public class PKGameRenderer implements Renderer
 	private PKImage miniMap = new PKImage(PKEngine.MINI_MAP_SCALE, PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
 	private PKImage mascot = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage openChestSuccess = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	
 	// Variables for time.
 	private long loopStart = 0;
 	private long loopEnd = 0;
 	private long loopRunTime = 0;
 	private long startTime = 0;
-	private long countdownPlayerJoinTime = 0;
-	private long gameTimer = 0;
-	private int gameTimeElapsed = 0;
+	private long startAddScoreTime = 0;
 	private boolean startGameTimer = false;
 	private boolean startLoginTimer = false;
 	private boolean startFallingCoinTimer = false;
@@ -89,7 +90,6 @@ public class PKGameRenderer implements Renderer
 				{
 					startLoginTimer = false;
 					startGameTimer = true;
-					gameTimer = System.currentTimeMillis();
 				}
 				break;
 			case 3:
@@ -134,6 +134,8 @@ public class PKGameRenderer implements Renderer
 		// Draw PoV map.
 		drawPovMap(gl);
 		drawPlayer(gl);
+		if (addChestScore)
+			drawChestScore(gl, startAddScoreTime);
 		
 		// Draw rest elements of UI.
 		drawOverlay(gl);
@@ -156,6 +158,7 @@ public class PKGameRenderer implements Renderer
 		loopEnd = System.currentTimeMillis();
 		loopRunTime = loopEnd - loopStart;
 	}
+
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
@@ -188,7 +191,7 @@ public class PKGameRenderer implements Renderer
 		try
 		{
 			font.LoadFontAlt("digital.bff", gl);
-			timerFont.LoadFontAlt("vintageone.bff", gl);
+			timerFont.LoadFontAlt("digital2.bff", gl);
 		}
 		catch (IOException e)
 		{
@@ -201,12 +204,14 @@ public class PKGameRenderer implements Renderer
 		overlayTop.loadTexture(gl, PKEngine.OVERLAY_TOP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		overlayBtm.loadTexture(gl, PKEngine.OVERLAY_BTM, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		player.loadTexture(gl, PKEngine.PLAYER_SPRITE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
-		treasureChest.loadTexture(gl, PKEngine.TREASURE_CHEST, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		treasureChest.loadTexture(gl, PKEngine.TREASURE_CHEST_CLOSED, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		addGold.loadTexture(gl, PKEngine.ADD_GOLD, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		treasureKey.loadTexture(gl, PKEngine.TREASURE_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		goldCoin.loadTexture(gl, PKEngine.GOLD_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		mascot.loadTexture(gl, PKEngine.MASCOT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		openChestSuccess.loadTexture(gl, PKEngine.MASCOT_OPEN_CHEST_SUCCESS, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// testing
 		startTime = System.currentTimeMillis();
@@ -286,17 +291,11 @@ public class PKGameRenderer implements Renderer
 	}
 	
 	private void printGameTime(GL10 gl)
-	{
-/*		if (System.currentTimeMillis() - gameTimer >= 1000)
-		{
-			gameTimeElapsed = gameTimeElapsed + 1;
-			gameTimer = System.currentTimeMillis();
-		}*/
-		
-		int timeFromServer = PKEngine.client.getcurrentInGameTime();
-		
+	{		
+		int timeFromServer = PKEngine.client.getCurrentInGameTime();
 		int minutes = timeFromServer / 60;
 		int seconds = timeFromServer % 60;
+		
 		timerFont.SetScale(2.0f);
 		timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - timerFont.fntCellHeight);
 	}
@@ -482,6 +481,27 @@ public class PKGameRenderer implements Renderer
 		}
 	}
 	
+	private void drawChestScore(GL10 gl, long startTime) {
+		// Draw +50.
+		if (System.currentTimeMillis() - startTime < 2000)
+		{
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			gl.glLoadIdentity();
+			gl.glPushMatrix();
+			gl.glTranslatef(0.5f, 0.5f, 0.0f);
+			
+			gl.glMatrixMode(GL10.GL_TEXTURE);
+			gl.glLoadIdentity();
+			
+			addGold.draw(gl);
+			gl.glPopMatrix();
+			gl.glLoadIdentity();
+		} else
+		{
+			addChestScore = false;
+		}
+	}
+	
 	private void drawTreasureChest(GL10 gl, int relativePosX, int relativePosY, float xOffset, float yOffset)
 	{
 		// Draw a single treasure chest.
@@ -539,7 +559,7 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
-		mascot.draw(gl);
+		openChestSuccess.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}
@@ -627,16 +647,17 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
-			} catch (Exception e)
+				if (checkChestReply.equalsIgnoreCase("Successful"))
+				{
+					startAddScoreTime = System.currentTimeMillis();
+					addChestScore = true;
+				}
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public int getScore()
-	{
-		return playerScore;
 	}
 
 	public String verifyKey(int keyCode) throws Exception 
