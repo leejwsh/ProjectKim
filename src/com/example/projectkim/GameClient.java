@@ -69,7 +69,8 @@ public class GameClient {
 	final int port = 9001;
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "192.168.1.217";
-	final String gameServerAddress = "10.0.2.2";
+	final String gameServerAddress = "192.168.1.82";
+	//final String gameServerAddress = "10.0.2.2";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 	

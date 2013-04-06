@@ -1,5 +1,7 @@
 package com.example.projectkim;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -78,7 +80,11 @@ public class PKEngine
 	public static final int MASCOT_WIDTH = 800;
 	public static final int MASCOT_HEIGHT = 360;
 	public static final int MASCOT_OPEN_CHEST_SUCCESS = R.drawable.mascot_open_success;
-	public static final int GAME_DURATION = 30;
+	public static final int MASCOT_LEARN_SR1 = R.drawable.mascot_know_sr1;
+	public static final int MASCOT_NO_CHEST = R.drawable.mascot_nochest;
+	public static final int MASCOT_NO_KEY = R.drawable.mascot_nokey;
+	public static final int MASCOT_INVALID_KEY = R.drawable.mascot_wrongkey;
+	public static final int MASCOT_CORRECT_KEY = R.drawable.mascot_correctkey;
 	
 	// Constants for mini map.
 	public static final int MINI_MAP = R.drawable.map3;
@@ -107,6 +113,7 @@ public class PKEngine
 	public static int playerWalkAction = 0;
 	public static boolean treasureKeyEvent = false;
 	public static int[][] treasureLocations = new int[POV_MAP_HEIGHT][POV_MAP_WIDTH];
+	public static ArrayList<PKImage> mascotImages = new ArrayList<PKImage>();
 	
 	// Kill game and exit.
 	public boolean onExit()

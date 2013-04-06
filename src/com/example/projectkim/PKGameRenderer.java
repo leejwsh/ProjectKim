@@ -11,7 +11,7 @@ import android.opengl.GLSurfaceView.Renderer;
 public class PKGameRenderer implements Renderer
 {
 	// Variables for text.
-	private TexFont font, timerFont;
+	private TexFont font;//, timerFont;
 	
 	// Variables for background.
 	private PKImage background = new PKImage();
@@ -34,7 +34,7 @@ public class PKGameRenderer implements Renderer
 	private int playerScore;
 	private int numKeys;
 	
-	// Variables for rest elements of UI.
+	// Variables for rest of the elements of UI.
 	private PKImage overlayTop = new PKImage(1.0f, 0.6f * (PKEngine.scrHeight - PKEngine.scrWidth) / PKEngine.scrHeight, 1.0f, 1.0f);
 	private PKImage overlayBtm = new PKImage();
 	private PKImage treasureKey = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.TREASURE_KEY_HEIGHT / PKEngine.TREASURE_KEY_WIDTH, 1.0f, 1.0f);
@@ -42,7 +42,13 @@ public class PKGameRenderer implements Renderer
 	private PKImage miniMap = new PKImage(PKEngine.MINI_MAP_SCALE, PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
 	private PKImage mascot = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
-	private PKImage openChestSuccess = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgOpenChestSuccess = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgKnowSrOne = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgNoChest = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgNoKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgCorrectKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgInvalidKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private int msgIndicator = 0;
 	
 	// Variables for time.
 	private long loopStart = 0;
@@ -50,6 +56,7 @@ public class PKGameRenderer implements Renderer
 	private long loopRunTime = 0;
 	private long startTime = 0;
 	private long startAddScoreTime = 0;
+	private long startMsgTime = 0;
 	private boolean startGameTimer = false;
 	private boolean startLoginTimer = false;
 	private boolean startFallingCoinTimer = false;
@@ -77,7 +84,6 @@ public class PKGameRenderer implements Renderer
 		// 5 = game end
 		
 		// Updates current Event
-		System.out.println(PKEngine.client.getGlobalEventStatus()  + "");
 		switch (PKEngine.client.getGlobalEventStatus())
 		{
 			case 1:
@@ -105,7 +111,6 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-				System.out.println(PKEngine.client.getGlobalEventStatus()  + "");
 				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 			}
 			catch (Exception e)
@@ -187,11 +192,11 @@ public class PKGameRenderer implements Renderer
 		
 		// Loads fonts
 		font = new TexFont(PKEngine.context, gl);
-		timerFont = new TexFont(PKEngine.context, gl);
+		//timerFont = new TexFont(PKEngine.context, gl);
 		try
 		{
-			font.LoadFontAlt("digital.bff", gl);
-			timerFont.LoadFontAlt("digital2.bff", gl);
+			font.LoadFontAlt("digital2.bff", gl);
+			//timerFont.LoadFontAlt("digital2.bff", gl);
 		}
 		catch (IOException e)
 		{
@@ -211,7 +216,28 @@ public class PKGameRenderer implements Renderer
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		mascot.loadTexture(gl, PKEngine.MASCOT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
-		openChestSuccess.loadTexture(gl, PKEngine.MASCOT_OPEN_CHEST_SUCCESS, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgOpenChestSuccess.loadTexture(gl, PKEngine.MASCOT_OPEN_CHEST_SUCCESS, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgKnowSrOne.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgNoChest.loadTexture(gl, PKEngine.MASCOT_NO_CHEST, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgNoKey.loadTexture(gl, PKEngine.MASCOT_NO_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgCorrectKey.loadTexture(gl, PKEngine.MASCOT_CORRECT_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgInvalidKey.loadTexture(gl, PKEngine.MASCOT_INVALID_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		
+		// Loads mascot images.
+		// [0] - mascot
+		// [1] - Open Chest Success
+		// [2] - No Chests
+		// [3] - No Keys
+		// [4] - Correct Key
+		// [5] - Invalid Key
+		// [6] - Did You Know - SR1
+		PKEngine.mascotImages.add(mascot);
+		PKEngine.mascotImages.add(msgOpenChestSuccess);
+		PKEngine.mascotImages.add(msgNoChest);
+		PKEngine.mascotImages.add(msgNoKey);
+		PKEngine.mascotImages.add(msgCorrectKey);
+		PKEngine.mascotImages.add(msgInvalidKey);
+		PKEngine.mascotImages.add(msgKnowSrOne);
 		
 		// testing
 		startTime = System.currentTimeMillis();
@@ -291,18 +317,24 @@ public class PKGameRenderer implements Renderer
 	}
 	
 	private void printGameTime(GL10 gl)
-	{		
+	{
+		//timerFont.SetScale(2.0f);
+		font.SetScale(2.0f);
+		//timerFont.PrintAt(gl, "TIME", 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight);
+		font.PrintAt(gl, "TIME", 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight);
+		
 		int timeFromServer = PKEngine.client.getCurrentInGameTime();
 		int minutes = timeFromServer / 60;
 		int seconds = timeFromServer % 60;
-		
-		timerFont.SetScale(2.0f);
-		timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - timerFont.fntCellHeight);
+		//timerFont.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - timerFont.fntCellHeight);
+		font.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - font.fntCellHeight);
 	}
 	
 	private void printLoginTimer(GL10 gl) {
-		timerFont.SetScale(3.0f);
-		timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
+		//timerFont.SetScale(3.0f);
+		font.SetScale(3.0f);
+		//timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
+		font.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
 	}
 	
 	private void drawPlayer(GL10 gl)
@@ -559,7 +591,9 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
-		openChestSuccess.draw(gl);
+		if (System.currentTimeMillis() - startMsgTime > 5000)
+			msgIndicator = 0;
+		PKEngine.mascotImages.get(msgIndicator).draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}
@@ -650,8 +684,15 @@ public class PKGameRenderer implements Renderer
 				if (checkChestReply.equalsIgnoreCase("Successful"))
 				{
 					startAddScoreTime = System.currentTimeMillis();
+					msgIndicator = 1;
 					addChestScore = true;
-				}
+				} else if (checkChestReply.equalsIgnoreCase("NoChest"))
+				{
+					
+					msgIndicator = 2;
+				} else
+					msgIndicator = 3;
+				startMsgTime = System.currentTimeMillis();
 			}
 			catch (Exception e)
 			{
@@ -683,6 +724,11 @@ public class PKGameRenderer implements Renderer
 			try
 			{
 				checkKeyReply = PKEngine.client.addKeyCodeEvent(PKEngine.PLAYER_ID, keyCode);
+				if (checkKeyReply.equalsIgnoreCase("Successful"))
+					msgIndicator = 4;
+				else
+					msgIndicator = 5;
+				startMsgTime = System.currentTimeMillis();
 			} catch (Exception e)
 			{
 				e.printStackTrace();
