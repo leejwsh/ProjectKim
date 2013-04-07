@@ -80,11 +80,14 @@ public class PKEngine
 	public static final int MASCOT_WIDTH = 800;
 	public static final int MASCOT_HEIGHT = 360;
 	public static final int MASCOT_OPEN_CHEST_SUCCESS = R.drawable.mascot_open_success;
-	public static final int MASCOT_LEARN_SR1 = R.drawable.mascot_know_sr1;
 	public static final int MASCOT_NO_CHEST = R.drawable.mascot_nochest;
 	public static final int MASCOT_NO_KEY = R.drawable.mascot_nokey;
 	public static final int MASCOT_INVALID_KEY = R.drawable.mascot_wrongkey;
 	public static final int MASCOT_CORRECT_KEY = R.drawable.mascot_correctkey;
+	public static final int MASCOT_LEARN_SR1 = R.drawable.mascot_know_sr1;
+	public static final int MASCOT_LEARN_STUD_LOUNGE = R.drawable.mascot_know_lounge;
+	public static final int MASCOT_LEARN_HCI = R.drawable.mascot_know_hci;
+	public static final int MASCOT_LEARN_SMALL_SR = R.drawable.mascot_know_smallsr;
 	
 	// Constants for mini map.
 	public static final int MINI_MAP = R.drawable.map3;

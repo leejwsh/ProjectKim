@@ -43,11 +43,14 @@ public class PKGameRenderer implements Renderer
 	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
 	private PKImage mascot = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgOpenChestSuccess = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
-	private PKImage msgKnowSrOne = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgNoChest = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgNoKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgCorrectKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgInvalidKey = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgKnowSrOne = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgKnowHCI = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgKnowStudLounge = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgKnowSmallSR = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private int msgIndicator = 0;
 	
 	// Variables for time.
@@ -217,20 +220,26 @@ public class PKGameRenderer implements Renderer
 		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		mascot.loadTexture(gl, PKEngine.MASCOT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgOpenChestSuccess.loadTexture(gl, PKEngine.MASCOT_OPEN_CHEST_SUCCESS, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
-		msgKnowSrOne.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgNoChest.loadTexture(gl, PKEngine.MASCOT_NO_CHEST, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgNoKey.loadTexture(gl, PKEngine.MASCOT_NO_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgCorrectKey.loadTexture(gl, PKEngine.MASCOT_CORRECT_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgInvalidKey.loadTexture(gl, PKEngine.MASCOT_INVALID_KEY, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgKnowSrOne.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgKnowHCI.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgKnowStudLounge.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgKnowSmallSR.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// Loads mascot images.
-		// [0] - mascot
+		// [0] - mascot //Default
 		// [1] - Open Chest Success
 		// [2] - No Chests
 		// [3] - No Keys
 		// [4] - Correct Key
 		// [5] - Invalid Key
-		// [6] - Did You Know - SR1
+		// [6] - Did You Know - Seminar Room 1
+		// [7] - Did You Know - HCI
+		// [8] - Did You Know - Student Lounge
+		// [9] - Did You Know - Small Seminar Room
 		PKEngine.mascotImages.add(mascot);
 		PKEngine.mascotImages.add(msgOpenChestSuccess);
 		PKEngine.mascotImages.add(msgNoChest);
@@ -238,6 +247,9 @@ public class PKGameRenderer implements Renderer
 		PKEngine.mascotImages.add(msgCorrectKey);
 		PKEngine.mascotImages.add(msgInvalidKey);
 		PKEngine.mascotImages.add(msgKnowSrOne);
+		PKEngine.mascotImages.add(msgKnowHCI);
+		PKEngine.mascotImages.add(msgKnowStudLounge);
+		PKEngine.mascotImages.add(msgKnowSmallSR);
 		
 		// testing
 		startTime = System.currentTimeMillis();
@@ -529,9 +541,7 @@ public class PKGameRenderer implements Renderer
 			gl.glPopMatrix();
 			gl.glLoadIdentity();
 		} else
-		{
 			addChestScore = false;
-		}
 	}
 	
 	private void drawTreasureChest(GL10 gl, int relativePosX, int relativePosY, float xOffset, float yOffset)
