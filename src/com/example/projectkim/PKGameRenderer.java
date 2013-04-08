@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.content.Intent;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.AsyncTask;
+import android.os.Handler;
 
 public class PKGameRenderer implements Renderer
 {
@@ -63,6 +67,16 @@ public class PKGameRenderer implements Renderer
 	private boolean startGameTimer = false;
 	private boolean startLoginTimer = false;
 	private boolean startFallingCoinTimer = false;
+	private boolean startMiniGame = false;
+	private int test = 0;
+	
+	private Context mContext;
+	private Handler handler;
+	
+	public PKGameRenderer(Context context)
+	{
+		mContext = context;
+	}
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -87,6 +101,7 @@ public class PKGameRenderer implements Renderer
 		// 5 = game end
 		
 		// Updates current Event
+		System.out.println(""+PKEngine.client.getGlobalEventStatus());
 		switch (PKEngine.client.getGlobalEventStatus())
 		{
 			case 1:
@@ -102,10 +117,13 @@ public class PKGameRenderer implements Renderer
 				}
 				break;
 			case 3:
+				startMiniGame = true;
 				if (!startFallingCoinTimer)
 				{
 					startFallingCoinTimer = true;
 				}
+			case 4:
+				PKEngine.startMiniGame = false;
 		}
 		
 		if (System.currentTimeMillis() - startTime >= 1000)
@@ -157,7 +175,11 @@ public class PKGameRenderer implements Renderer
 			printLoginTimer(gl);
 		if (startGameTimer)
 			printGameTime(gl);
-		
+		if (startMiniGame && test == 0)
+		{
+			test = 1;
+			new MiniGame().execute();
+		}
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -167,6 +189,26 @@ public class PKGameRenderer implements Renderer
 		loopRunTime = loopEnd - loopStart;
 	}
 
+	private class MiniGame extends AsyncTask<String, Void, String>
+	{
+		@Override
+		protected void onPreExecute() {
+			Intent miniGame = new Intent(mContext, SuperJumper.class);
+			mContext.startActivity(miniGame);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected String doInBackground(String... arg0)
+		{
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+		}
+	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)

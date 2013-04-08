@@ -8,6 +8,8 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -26,6 +28,7 @@
         <activity android:name="PKMainMenu" android:screenOrientation="portrait"></activity>
         <service android:name="PKMusic"></service>
         <activity android:screenOrientation="portrait" android:name="PKGame"></activity>
+        <activity android:name="SuperJumper"></activity>
     </application>
 
 </manifest>

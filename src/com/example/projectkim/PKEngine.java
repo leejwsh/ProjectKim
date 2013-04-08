@@ -118,6 +118,10 @@ public class PKEngine
 	public static int[][] treasureLocations = new int[POV_MAP_HEIGHT][POV_MAP_WIDTH];
 	public static ArrayList<PKImage> mascotImages = new ArrayList<PKImage>();
 	
+	// Variables for mini game.
+	public static boolean startMiniGame = false;
+	public static boolean miniGameIsRunning = false;
+	
 	// Kill game and exit.
 	public boolean onExit()
 	{

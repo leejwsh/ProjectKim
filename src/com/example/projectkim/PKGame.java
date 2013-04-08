@@ -4,10 +4,12 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -35,7 +37,7 @@ public class PKGame extends Activity
 		super.onCreate(savedInstanceState);
 		
 		new Connection().execute();
-		renderer = new PKGameRenderer();
+		renderer = new PKGameRenderer(PKGame.this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.game);
 		gameView = (PKGameView)findViewById(R.id.PKGameView);
@@ -84,8 +86,40 @@ public class PKGame extends Activity
 		ImageButton numDel = (ImageButton)findViewById(R.id.numDel);
 		ImageButton numEnter = (ImageButton)findViewById(R.id.numEnter);
 		currentKeyPos = 0;
+		new MiniGame().execute();
+		//swapMiniGame();
 	}
 	
+	private class MiniGame extends AsyncTask<String, Void, String>
+	{
+
+		@Override
+		protected String doInBackground(String... arg0)
+		{
+			try
+			{
+				System.out.println("Test");
+			}
+			catch (Exception e)
+			{
+				System.out.println(e);
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (PKEngine.startMiniGame && !PKEngine.miniGameIsRunning)
+			{
+				PKEngine.miniGameIsRunning = true;
+				Intent mainMenu = new Intent(PKGame.this, SuperJumper.class);
+				PKGame.this.startActivity(mainMenu);
+			}
+			super.onPostExecute(result);
+		}
+	}
+
 	public void buttonOnClick(View v) throws Exception
 	{
 		switch (v.getId())
