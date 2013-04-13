@@ -55,7 +55,11 @@ public class PKGameRenderer implements Renderer
 	private PKImage msgKnowHCI = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgKnowStudLounge = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgKnowSmallSR = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage resultWin = new PKImage();
+	private PKImage resultLose = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.RESULT_HEIGHT / PKEngine.RESULT_WIDTH, 1.0f, 1.0f);
+	private PKImage loadingMsg = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.LOADING_MSG_HEIGHT / PKEngine.LOADING_MSG_WIDTH, 1.0f, 1.0f);
 	private int msgIndicator = 0;
+	private boolean showEndGameMsg = false;
 	
 	// Variables for time.
 	private long loopStart = 0;
@@ -71,7 +75,6 @@ public class PKGameRenderer implements Renderer
 	private int test = 0;
 	
 	private Context mContext;
-	private Handler handler;
 	
 	public PKGameRenderer(Context context)
 	{
@@ -122,23 +125,33 @@ public class PKGameRenderer implements Renderer
 				{
 					startFallingCoinTimer = true;
 				}
+				break;
 			case 4:
-				PKEngine.startMiniGame = false;
+				startMiniGame = false;
+				test = 0;
+				break;
+			case 5:
+				startGameTimer = false;
+				showEndGameMsg = true;
+				PKEngine.gameEnd = true;
+				break;
 		}
-		
-		if (System.currentTimeMillis() - startTime >= 1000)
+		if (!showEndGameMsg)
 		{
-			// Update positions on server.
-			try
+			if (System.currentTimeMillis() - startTime >= 500)
 			{
-				PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-				//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
+				// Update positions on server.
+				try
+				{
+					PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+					//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				startTime = System.currentTimeMillis();
 			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			startTime = System.currentTimeMillis();
 		}
 		
 		// Update player location.
@@ -169,16 +182,27 @@ public class PKGameRenderer implements Renderer
 		drawGoldCoin(gl);
 		drawMiniMap(gl);
 		printLocationName(gl);
-		printKeys(gl);
-		printScore(gl);
 		if (startLoginTimer)
-			printLoginTimer(gl);
+		{
+			drawLoginMsg(gl);
+			printLoginInfo(gl);
+		}
 		if (startGameTimer)
 			printGameTime(gl);
 		if (startMiniGame && test == 0)
 		{
 			test = 1;
 			new MiniGame().execute();
+		}
+		
+		if (showEndGameMsg)
+		{
+			drawEndGame(gl);
+			printEndGameInfo(gl);
+		} else
+		{
+			printKeys(gl);
+			printScore(gl);
 		}
 		// Set blending.
 		gl.glEnable(GL10.GL_BLEND);
@@ -188,7 +212,7 @@ public class PKGameRenderer implements Renderer
 		loopEnd = System.currentTimeMillis();
 		loopRunTime = loopEnd - loopStart;
 	}
-
+	
 	private class MiniGame extends AsyncTask<String, Void, String>
 	{
 		@Override
@@ -270,6 +294,9 @@ public class PKGameRenderer implements Renderer
 		msgKnowHCI.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgKnowStudLounge.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgKnowSmallSR.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		resultWin.loadTexture(gl, PKEngine.RESULT_WIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		resultLose.loadTexture(gl, PKEngine.RESULT_LOSE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		loadingMsg.loadTexture(gl, PKEngine.LOADING_MSG, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// Loads mascot images.
 		// [0] - mascot //Default
@@ -384,11 +411,33 @@ public class PKGameRenderer implements Renderer
 		font.PrintAt(gl, "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), 0.05f * PKEngine.scrWidth, 0.83f * PKEngine.scrHeight - font.fntCellHeight);
 	}
 	
-	private void printLoginTimer(GL10 gl) {
-		//timerFont.SetScale(3.0f);
+	private void printLoginInfo(GL10 gl)
+	{
 		font.SetScale(3.0f);
-		//timerFont.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
-		font.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.5f * PKEngine.scrHeight);
+		font.PrintAt(gl, String.valueOf(PKEngine.client.getCurrentPreGameTime()), 0.5f * PKEngine.scrWidth, 0.25f * PKEngine.scrHeight);
+		
+		font.SetScale(1.0f);
+		font.PrintAt(gl, "NO. OF PLAYERS: " + String.valueOf(PKEngine.client.getNumPlayerLogon()), (PKEngine.scrWidth - font.GetTextLength("NO. OF PLAYERS: ")) / 2, 0.25f * PKEngine.scrHeight);
+	}
+	
+	private void printEndGameInfo(GL10 gl) {
+		font.SetScale(3.0f);
+		font.PrintAt(gl, "YOUR RANK: " + String.valueOf(PKEngine.client.getRankingOfGivenPlayer(PKEngine.PLAYER_ID)), (PKEngine.scrWidth - font.GetTextLength("YOUR RANK: ")) / 2, 0.4f * PKEngine.scrHeight);
+	}
+	
+	private void drawLoginMsg(GL10 gl)
+	{
+		// Draw Loading Msg Overlay
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		loadingMsg.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
 	}
 	
 	private void drawPlayer(GL10 gl)
@@ -718,6 +767,23 @@ public class PKGameRenderer implements Renderer
 		gl.glLoadIdentity();
 	}
 
+	private void drawEndGame(GL10 gl) {
+		// Draw End Game Result
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		
+		if (PKEngine.client.getRankingOfGivenPlayer(PKEngine.PLAYER_ID) == 1){
+			resultWin.draw(gl);
+		} else
+			resultLose.draw(gl);
+		gl.glPopMatrix();
+		gl.glLoadIdentity();
+	}
+	
 	public String openChest() throws Exception
 	{
 		OpenChestThread openChestThread = new OpenChestThread();

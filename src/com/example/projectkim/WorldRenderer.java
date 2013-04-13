@@ -34,7 +34,7 @@ public class WorldRenderer {
         renderTimer();
         
         if(renderCoin)  
-        renderObjects();
+        	renderObjects();
         
     }
 
@@ -51,30 +51,24 @@ public class WorldRenderer {
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         
-    	if(state==3 && System.currentTimeMillis() - startTime >= 300) {
+        long currentTime = System.currentTimeMillis() - startTime;
+        
+    	if(currentTime <= 1000) {
     		batcher.beginBatch(Assets.items);
         	batcher.drawSprite(5f, 7.5f, 3, 3, Assets.count3);
-        	startTime = System.currentTimeMillis();
-        	state = 2;
         	batcher.endBatch();
     	}
-    	else if(state==2 && System.currentTimeMillis() - startTime >= 1300) {
+    	else if(currentTime > 1000 && currentTime <= 2000) {
     		batcher.beginBatch(Assets.items);
         	batcher.drawSprite(5f, 7.5f, 3, 3, Assets.count2);
-        	startTime = System.currentTimeMillis();
-        	state = 1;
         	batcher.endBatch();
     	}
-    	else if(state==1 && System.currentTimeMillis() - startTime >= 2300) {
+    	else if(currentTime > 2000 && currentTime <= 3000) {
     		batcher.beginBatch(Assets.items);
         	batcher.drawSprite(5f, 7.5f, 3, 3, Assets.count1);
-        	startTime = System.currentTimeMillis();
-        	state = 0;
         	batcher.endBatch();
+    	} else
         	renderCoin = true;
-    	}
-        
-  
     	
     	gl.glDisable(GL10.GL_BLEND);
     }

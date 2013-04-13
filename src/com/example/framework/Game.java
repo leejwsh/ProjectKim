@@ -14,4 +14,8 @@ public interface Game {
     public Screen getCurrentScreen();
 
     public Screen getStartScreen();
+
+	public void killGame();
+
+	public int getTime();
 }

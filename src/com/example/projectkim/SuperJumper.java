@@ -11,9 +11,18 @@ import com.example.framework.impl.GLGame;
 
 public class SuperJumper extends GLGame {
     boolean firstTimeCreate = true;
+    int timer = PKEngine.client.getCurrentMiniGameTime();
     
     public Screen getStartScreen() {
         return new GameScreen(this);
+    }
+    
+    public void killGame() {
+    	SuperJumper.this.finish();
+    }
+    
+    public int getTime(){
+    	return timer;
     }
     
     @Override
@@ -38,18 +47,12 @@ public class SuperJumper extends GLGame {
 			{
 				try {
 					PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-					Thread.sleep(1000);
+					timer = PKEngine.client.getCurrentMiniGameTime();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			SuperJumper.this.finish();
-			super.onPostExecute(result);
 		}
 	}
     

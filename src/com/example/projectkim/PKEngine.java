@@ -9,7 +9,7 @@ import android.media.MediaPlayer;
 public class PKEngine
 {
 	// Constants for connection to server.
-	public static final int PLAYER_ID = 1;
+	public static final int PLAYER_ID = 0;
 	
 	// Constants for threads.
 	public static final int GAME_THREAD_DELAY = 1000;
@@ -89,6 +89,15 @@ public class PKEngine
 	public static final int MASCOT_LEARN_HCI = R.drawable.mascot_know_hci;
 	public static final int MASCOT_LEARN_SMALL_SR = R.drawable.mascot_know_smallsr;
 	
+	public static final int LOADING_MSG = R.drawable.wait_player;
+	public static final int LOADING_MSG_WIDTH = 800;
+	public static final int LOADING_MSG_HEIGHT = 1280;
+	
+	public static final int RESULT_WIN = R.drawable.result_win;
+	public static final int RESULT_LOSE = R.drawable.result_lose;
+	public static final int RESULT_WIDTH = 800;
+	public static final int RESULT_HEIGHT = 1280;
+	
 	// Constants for mini map.
 	public static final int MINI_MAP = R.drawable.map3;
 	public static final int MINI_MAP_WIDTH = 1600;
@@ -117,6 +126,7 @@ public class PKEngine
 	public static boolean treasureKeyEvent = false;
 	public static int[][] treasureLocations = new int[POV_MAP_HEIGHT][POV_MAP_WIDTH];
 	public static ArrayList<PKImage> mascotImages = new ArrayList<PKImage>();
+	public static boolean gameEnd = false;
 	
 	// Variables for mini game.
 	public static boolean startMiniGame = false;

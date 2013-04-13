@@ -35,9 +35,10 @@ public class PKGame extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		PKEngine.gameEnd = false;
 		
 		new Connection().execute();
-		renderer = new PKGameRenderer(PKGame.this);
+		renderer = new PKGameRenderer(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.game);
 		gameView = (PKGameView)findViewById(R.id.PKGameView);
@@ -300,10 +301,15 @@ public class PKGame extends Activity
 		gameView.onResume();
 	}
 
-/*	@Override
+	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		float x = event.getX();
+		if (PKEngine.gameEnd)
+		{
+			PKGame.super.onBackPressed();
+		}
+		
+		/*float x = event.getX();
 		float y = event.getY();
 		
 		if (y < 100)
@@ -362,10 +368,10 @@ public class PKGame extends Activity
 		{
 			// Treasure key.
 			PKEngine.treasureKeyEvent = true;
-		}
+		}*/
 		
 		return false;
-	}*/
+	}
 
 	@Override
 	public void onBackPressed()

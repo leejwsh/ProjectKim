@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.widget.Toast;
+
 import com.example.framework.math.Vector2;
 
 public class World {
@@ -50,12 +52,12 @@ public class World {
 
     }
 
-    public void update(float deltaTime, float accelX) {
+    public void update(float deltaTime, float accelX, int timer) {
         updateBob(deltaTime, accelX);
         updateCoins(deltaTime );
         if (bob.state != Bob.BOB_STATE_HIT)
             checkCollisions();
-        checkGameOver();
+        checkGameOver(timer);
     }
 
     private void updateBob(float deltaTime, float accelX) {
@@ -137,9 +139,17 @@ public class World {
     }
 
 
-    private void checkGameOver() {
-  /*      if (heightSoFar - 7.5f > bob.position.y) {
-            state = WORLD_STATE_GAME_OVER;
-        }
-  */  }
+    private void checkGameOver(int timer) {
+    	/*try {
+			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+	        if (PKEngine.client.getCurrentMiniGameTime() == 0)
+	            state = WORLD_STATE_GAME_OVER;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+    	System.out.println("Timer: " + timer);
+    	if (timer == 0){
+    		state = WORLD_STATE_GAME_OVER;
+    	}
+    }
 }
