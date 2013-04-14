@@ -111,7 +111,7 @@ public class PKEngine
 	public static final int MINI_MAP_MARKER_HEIGHT = 100;
 	
 	// Variables for connection to server.
-	public static GameClient client;
+	public static PKGameClient client;
 	public static boolean isConnected = false;
 	
 	// Variables for screen size.

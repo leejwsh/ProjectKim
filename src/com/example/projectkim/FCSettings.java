@@ -8,58 +8,70 @@ import java.io.OutputStreamWriter;
 
 import com.example.framework.FileIO;
 
-public class Settings {
-    public static boolean soundEnabled = false; //off for coding purpose
+public class FCSettings
+{
+    public static boolean soundEnabled = false; // Off for coding purpose
     public final static int[] highscores = new int[] { 100, 80, 50, 30, 10 };
     public final static String file = ".superjumper";
 
-    public static void load(FileIO files) {
+    public static void load(FileIO files)
+    {
         BufferedReader in = null;
-        try {
+        try
+        {
             in = new BufferedReader(new InputStreamReader(files.readFile(file)));
             soundEnabled = Boolean.parseBoolean(in.readLine());
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 highscores[i] = Integer.parseInt(in.readLine());
             }
         } catch (IOException e) {
             // :( It's ok we have defaults
         } catch (NumberFormatException e) {
             // :/ It's ok, defaults save our day
-        } finally {
-            try {
+        } finally
+        {
+            try
+            {
                 if (in != null)
                     in.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) {}
         }
     }
 
-    public static void save(FileIO files) {
+    public static void save(FileIO files)
+    {
         BufferedWriter out = null;
-        try {
+        try
+        {
             out = new BufferedWriter(new OutputStreamWriter(
                     files.writeFile(file)));
             out.write(Boolean.toString(soundEnabled));
             out.write("\n");
-            for(int i = 0; i < 5; i++) {
+            for(int i = 0; i < 5; i++)
+            {
                 out.write(Integer.toString(highscores[i]));
                 out.write("\n");
             }
 
-        } catch (IOException e) {
-        } finally {
-            try {
+        } catch (IOException e) {}
+        finally
+        {
+            try
+            {
                 if (out != null)
                     out.close();
-            } catch (IOException e) {
-            }
+            } catch (IOException e) {}
         }
     }
 
-    public static void addScore(int score) {
-        for(int i=0; i < 5; i++) {
-            if(highscores[i] < score) {
-                for(int j= 4; j > i; j--)
+    public static void addScore(int score)
+    {
+        for (int i=0; i < 5; i++)
+        {
+            if (highscores[i] < score)
+            {
+                for (int j= 4; j > i; j--)
                     highscores[j] = highscores[j-1];
                 highscores[i] = score;
                 break;

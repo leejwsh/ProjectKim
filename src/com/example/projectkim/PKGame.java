@@ -87,38 +87,6 @@ public class PKGame extends Activity
 		ImageButton numDel = (ImageButton)findViewById(R.id.numDel);
 		ImageButton numEnter = (ImageButton)findViewById(R.id.numEnter);
 		currentKeyPos = 0;
-		new MiniGame().execute();
-		//swapMiniGame();
-	}
-	
-	private class MiniGame extends AsyncTask<String, Void, String>
-	{
-
-		@Override
-		protected String doInBackground(String... arg0)
-		{
-			try
-			{
-				System.out.println("Test");
-			}
-			catch (Exception e)
-			{
-				System.out.println(e);
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			if (PKEngine.startMiniGame && !PKEngine.miniGameIsRunning)
-			{
-				PKEngine.miniGameIsRunning = true;
-				Intent mainMenu = new Intent(PKGame.this, SuperJumper.class);
-				PKGame.this.startActivity(mainMenu);
-			}
-			super.onPostExecute(result);
-		}
 	}
 
 	public void buttonOnClick(View v) throws Exception
@@ -127,7 +95,8 @@ public class PKGame extends Activity
 		{
 			case R.id.btnOpenChest:
 				String chestReply = renderer.openChest();
-				if (chestReply.equalsIgnoreCase("Successful"))
+				// For testing purposes.
+				/*if (chestReply.equalsIgnoreCase("Successful"))
 				{
 					Toast msg = Toast.makeText(PKGame.this, "Successfully Opened!", Toast.LENGTH_SHORT);
 					msg.show();
@@ -139,7 +108,7 @@ public class PKGame extends Activity
 				{
 					Toast msg = Toast.makeText(PKGame.this, "You have no key. Go look for one!", Toast.LENGTH_SHORT);
 					msg.show();
-				}
+				}*/
 				break;
 			case R.id.btnKey:
 				if (keypad.getVisibility() == View.INVISIBLE)
@@ -218,21 +187,24 @@ public class PKGame extends Activity
 					String keyReply = renderer.verifyKey(Integer.valueOf(keyCode));
 					if (keyReply.equalsIgnoreCase("Successful"))
 					{
-						Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
-						msg.show();
+						// For testing purposes.
+						/*Toast msg = Toast.makeText(PKGame.this, "+1 key!", Toast.LENGTH_SHORT);
+						msg.show();*/
 						keypad.setVisibility(View.INVISIBLE);
 						keypadInput.setVisibility(View.INVISIBLE);
 						resetKeyCode();
 						currentKeyPos = 0;
 					} else
 					{
-						Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
-						msg.show();
+						// For testing purposes.
+						/*Toast msg = Toast.makeText(PKGame.this, "Keycode " + keyCode + " does not exist", Toast.LENGTH_SHORT);
+						msg.show();*/
 					}
 				} else
 				{
-					Toast msg = Toast.makeText(PKGame.this, "No code entered!", Toast.LENGTH_SHORT);
-					msg.show();
+					// For testing purposes.
+					/*Toast msg = Toast.makeText(PKGame.this, "No code entered!", Toast.LENGTH_SHORT);
+					msg.show();*/
 				}
 				break;
 		}	
@@ -272,7 +244,7 @@ public class PKGame extends Activity
 			try
 			{
 				System.out.print("Establishing connection... ");
-				PKEngine.client = new GameClient();
+				PKEngine.client = new PKGameClient();
 				PKEngine.isConnected = true;
 				System.out.println("Connected.");
 			}
@@ -309,6 +281,7 @@ public class PKGame extends Activity
 			PKGame.super.onBackPressed();
 		}
 		
+		// For testing purposes.
 		/*float x = event.getX();
 		float y = event.getY();
 		

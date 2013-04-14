@@ -8,7 +8,8 @@ import com.example.framework.gl.Texture;
 import com.example.framework.gl.TextureRegion;
 import com.example.framework.impl.GLGame;
 
-public class Assets {
+public class FCAssets
+{
     public static Texture background;
     public static TextureRegion backgroundRegion;
     
@@ -41,7 +42,8 @@ public class Assets {
     public static Sound coinSound;
     public static Sound clickSound;
 
-    public static void load(GLGame game) {
+    public static void load(GLGame game)
+    {
         background = new Texture(game, "background.png");
         backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
         
@@ -50,7 +52,7 @@ public class Assets {
         pauseMenu = new TextureRegion(items, 0, 0, 1, 1);
         ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = new TextureRegion(items, 352, 256, 160, 96);
-        highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
+        highScoresRegion = new TextureRegion(FCAssets.items, 0, 257, 300, 110 / 3);
         logo = new TextureRegion(items, 0, 352, 274, 142);
         soundOff = new TextureRegion(items, 0, 0, 64, 64);
         soundOn = new TextureRegion(items, 64, 0, 64, 64);
@@ -84,7 +86,7 @@ public class Assets {
         music = game.getAudio().newMusic("music.mp3");
         music.setLooping(true);
         music.setVolume(0.5f);
-        if(Settings.soundEnabled)
+        if (FCSettings.soundEnabled)
             music.play();
         jumpSound = game.getAudio().newSound("jump.ogg");
         highJumpSound = game.getAudio().newSound("highjump.ogg");
@@ -93,15 +95,17 @@ public class Assets {
         clickSound = game.getAudio().newSound("click.ogg");       
     }       
 
-    public static void reload() {
+    public static void reload()
+    {
         background.reload();
         items.reload();
-        if(Settings.soundEnabled)
+        if (FCSettings.soundEnabled)
             music.play();
     }
 
-    public static void playSound(Sound sound) {
-        if(Settings.soundEnabled)
+    public static void playSound(Sound sound)
+    {
+        if (FCSettings.soundEnabled)
             sound.play(1);
     }
 }

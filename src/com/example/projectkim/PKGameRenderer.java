@@ -15,7 +15,7 @@ import android.os.Handler;
 public class PKGameRenderer implements Renderer
 {
 	// Variables for text.
-	private TexFont font;//, timerFont;
+	private PKTexFont font;//, timerFont;
 	
 	// Variables for background.
 	private PKImage background = new PKImage();
@@ -217,7 +217,7 @@ public class PKGameRenderer implements Renderer
 	{
 		@Override
 		protected void onPreExecute() {
-			Intent miniGame = new Intent(mContext, SuperJumper.class);
+			Intent miniGame = new Intent(mContext, FallingCoinsActivity.class);
 			mContext.startActivity(miniGame);
 			super.onPreExecute();
 		}
@@ -260,7 +260,7 @@ public class PKGameRenderer implements Renderer
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		// Loads fonts
-		font = new TexFont(PKEngine.context, gl);
+		font = new PKTexFont(PKEngine.context, gl);
 		//timerFont = new TexFont(PKEngine.context, gl);
 		try
 		{

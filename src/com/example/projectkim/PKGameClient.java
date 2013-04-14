@@ -9,7 +9,7 @@ package com.example.projectkim;
 import java.util.*;
 import java.net.*;
 
-public class GameClient {
+public class PKGameClient {
 
 	final int ROW = 7; // Number of rows of Nodes
 	final int COLUMN = 14; // Number of column of Nodes
@@ -70,14 +70,14 @@ public class GameClient {
 	final int port = 9001;
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "localhost";
-	//final String gameServerAddress = "10.0.2.2";
-	final String gameServerAddress = "172.28.177.45";
+	final String gameServerAddress = "10.0.2.2";
+	//final String gameServerAddress = "172.28.177.45";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 
 
 	/* Constructor */
-	public GameClient() throws Exception {
+	public PKGameClient() throws Exception {
 		randomGenerator = new Random();
 		initializeSocket();
 		initializeTreasureList();

@@ -27,7 +27,7 @@ import javax.microedition.khronos.opengles.GL11Ext;
 import android.content.res.AssetManager;
 import android.content.Context;
  
-public class TexFont 
+public class PKTexFont 
 {
 	Context mContext;
 	float xScale, yScale;
@@ -40,7 +40,7 @@ public class TexFont
 	int curX, curY;
 	int UVarray[];
 	
-	public TexFont(Context context, GL10 gl)
+	public PKTexFont(Context context, GL10 gl)
 	{
 		// Get handle on assets
 		mContext = context;
