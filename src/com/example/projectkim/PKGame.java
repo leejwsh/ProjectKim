@@ -48,6 +48,10 @@ public class PKGame extends Activity
 		openChest.setVisibility(View.VISIBLE);
 		openChest.setBackgroundColor(Color.TRANSPARENT);
 		
+		Button startMiniGame = (Button)findViewById(R.id.enterMiniGame);
+		startMiniGame.setVisibility(View.VISIBLE);
+		startMiniGame.setBackgroundColor(Color.TRANSPARENT);
+		
 		Button addKey = (Button)findViewById(R.id.btnKey);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 		params.leftMargin = 0;
@@ -123,6 +127,9 @@ public class PKGame extends Activity
 					resetKeyCode();
 					currentKeyPos = 0;
 				}
+				break;
+			case R.id.enterMiniGame:
+				renderer.checkMiniGame();
 				break;
 			case R.id.num0:
 				addNumber(0,currentKeyPos);

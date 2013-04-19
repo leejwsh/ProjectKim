@@ -155,4 +155,13 @@
 	    </TableRow>
     </TableLayout>
 
+	<Button
+        android:id="@+id/enterMiniGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="                 "
+        android:textSize="50sp"
+        android:onClick="buttonOnClick" />
 </RelativeLayout>

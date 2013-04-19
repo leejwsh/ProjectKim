@@ -26,6 +26,7 @@ public class PKGameRenderer implements Renderer
 	private PKImage addGold = new PKImage(0.2f, 0.2f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.ADD_GOLD_HEIGHT / PKEngine.ADD_GOLD_WIDTH, 1.0f, 1.0f);
 	private PKImage player = new PKImage(PKEngine.PLAYER_TEXTURE);
 	private int playerPosition = 0;
+	private int globalEventPosition = 49;
 	private ArrayList<Integer> playerNewPos = new ArrayList<Integer>();
 	private boolean animStart = false;
 	private boolean addChestScore = false;
@@ -45,6 +46,7 @@ public class PKGameRenderer implements Renderer
 	private PKImage goldCoin = new PKImage(0.08f, 0.08f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.GOLD_COIN_HEIGHT / PKEngine.GOLD_COIN_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMap = new PKImage(PKEngine.MINI_MAP_SCALE, PKEngine.MINI_MAP_SCALE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_HEIGHT / PKEngine.MINI_MAP_WIDTH, 1.0f, 1.0f);
 	private PKImage miniMapMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
+	private PKImage miniMapEventMarker = new PKImage(PKEngine.MINI_MAP_GRID_SIZE, PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MINI_MAP_MARKER_HEIGHT / PKEngine.MINI_MAP_MARKER_WIDTH, 1.0f, 1.0f);
 	private PKImage mascot = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgOpenChestSuccess = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgNoChest = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
@@ -55,10 +57,16 @@ public class PKGameRenderer implements Renderer
 	private PKImage msgKnowHCI = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgKnowStudLounge = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage msgKnowSmallSR = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgEventAnnouncement = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
+	private PKImage msgEnterMiniGame = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.MASCOT_HEIGHT / PKEngine.MASCOT_WIDTH, 1.0f, 1.0f);
 	private PKImage resultWin = new PKImage();
 	private PKImage resultLose = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.RESULT_HEIGHT / PKEngine.RESULT_WIDTH, 1.0f, 1.0f);
 	private PKImage loadingMsg = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.LOADING_MSG_HEIGHT / PKEngine.LOADING_MSG_WIDTH, 1.0f, 1.0f);
 	private int msgIndicator = 0;
+	private int currentEvent = -1;
+	private boolean globalMapIndicator = false;
+	private boolean enterMiniGame = false;
+	private boolean announceEvent = false;
 	private boolean showEndGameMsg = false;
 	
 	// Variables for time.
@@ -68,10 +76,12 @@ public class PKGameRenderer implements Renderer
 	private long startTime = 0;
 	private long startAddScoreTime = 0;
 	private long startMsgTime = 0;
+	private long blinkTime = 0;
 	private boolean startGameTimer = false;
 	private boolean startLoginTimer = false;
 	private boolean startFallingCoinTimer = false;
 	private boolean startMiniGame = false;
+	private boolean startBlinkTime = false;
 	private int test = 0;
 	
 	private Context mContext;
@@ -105,7 +115,8 @@ public class PKGameRenderer implements Renderer
 		
 		// Updates current Event
 		System.out.println(""+PKEngine.client.getGlobalEventStatus());
-		switch (PKEngine.client.getGlobalEventStatus())
+		currentEvent = PKEngine.client.getGlobalEventStatus();
+		switch (currentEvent)
 		{
 			case 1:
 				if (!startLoginTimer)
@@ -120,14 +131,32 @@ public class PKGameRenderer implements Renderer
 				}
 				break;
 			case 3:
-				startMiniGame = true;
+				announceEvent = true;
+				if (!startBlinkTime)
+	        	{
+					globalMapIndicator = true;
+	        		blinkTime = System.currentTimeMillis();
+	        		startBlinkTime = true;
+	        	}
+				if (System.currentTimeMillis() - blinkTime >= 500)
+				{
+					globalMapIndicator = !globalMapIndicator;
+					blinkTime = System.currentTimeMillis();
+				}
+				// System.out.println("System.currentTimeMillis(): " + System.currentTimeMillis());
+				// System.out.println("blinkTime: " + blinkTime);
+				if (playerPosition == globalEventPosition && enterMiniGame)
+					startMiniGame = true;
 				if (!startFallingCoinTimer)
 				{
 					startFallingCoinTimer = true;
 				}
 				break;
 			case 4:
+				globalMapIndicator = false;
 				startMiniGame = false;
+				enterMiniGame = false;
+				announceEvent = false;
 				test = 0;
 				break;
 			case 5:
@@ -284,6 +313,7 @@ public class PKGameRenderer implements Renderer
 		goldCoin.loadTexture(gl, PKEngine.GOLD_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMap.loadTexture(gl, PKEngine.MINI_MAP, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		miniMapMarker.loadTexture(gl, PKEngine.MINI_MAP_MARKER, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		miniMapEventMarker.loadTexture(gl, PKEngine.MINI_MAP_EVENT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		mascot.loadTexture(gl, PKEngine.MASCOT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgOpenChestSuccess.loadTexture(gl, PKEngine.MASCOT_OPEN_CHEST_SUCCESS, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgNoChest.loadTexture(gl, PKEngine.MASCOT_NO_CHEST, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
@@ -294,6 +324,8 @@ public class PKGameRenderer implements Renderer
 		msgKnowHCI.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgKnowStudLounge.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		msgKnowSmallSR.loadTexture(gl, PKEngine.MASCOT_LEARN_SR1, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgEventAnnouncement.loadTexture(gl, PKEngine.MASCOT_EVENT_ANNOUNCEMENT, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		msgEnterMiniGame.loadTexture(gl, PKEngine.MASCOT_ENTER_FALLING_COIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		resultWin.loadTexture(gl, PKEngine.RESULT_WIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		resultLose.loadTexture(gl, PKEngine.RESULT_LOSE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		loadingMsg.loadTexture(gl, PKEngine.LOADING_MSG, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
@@ -684,6 +716,36 @@ public class PKGameRenderer implements Renderer
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 		
+		// Draw mascot for global event announcement.
+		if (announceEvent)
+		{
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			gl.glLoadIdentity();
+			gl.glPushMatrix();
+			
+			gl.glMatrixMode(GL10.GL_TEXTURE);
+			gl.glLoadIdentity();
+			
+			msgEventAnnouncement.draw(gl);
+			gl.glPopMatrix();
+			gl.glLoadIdentity();
+		}
+		
+		// Draw mascot for entering global event.
+		if (playerPosition == globalEventPosition && currentEvent == 3)
+		{
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			gl.glLoadIdentity();
+			gl.glPushMatrix();
+			
+			gl.glMatrixMode(GL10.GL_TEXTURE);
+			gl.glLoadIdentity();
+			
+			msgEnterMiniGame.draw(gl);
+			gl.glPopMatrix();
+			gl.glLoadIdentity();
+		}
+		
 		// Draw mascot.
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -765,6 +827,28 @@ public class PKGameRenderer implements Renderer
 		miniMapMarker.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
+		
+		// Draw global event marker.
+		if (globalMapIndicator)
+		{
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			gl.glLoadIdentity();
+			gl.glPushMatrix();
+			gl.glTranslatef(PKEngine.MINI_MAP_X_OFFSET + 1.0f - PKEngine.MINI_MAP_SCALE + PKEngine.MINI_MAP_GRID_SIZE,
+							PKEngine.MINI_MAP_Y_OFFSET + 1.0f - 2.0f * PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight,
+							0.0f); // Translate marker to position 0 of map.
+			gl.glTranslatef(globalEventPosition % PKEngine.POV_MAP_WIDTH * PKEngine.MINI_MAP_GRID_SIZE,
+							-globalEventPosition / PKEngine.POV_MAP_WIDTH * PKEngine.MINI_MAP_GRID_SIZE * PKEngine.scrWidth / PKEngine.scrHeight,
+							0.0f); // Translate marker to global event position.
+			
+			gl.glMatrixMode(GL10.GL_TEXTURE);
+			gl.glLoadIdentity();
+			
+			// Map Pos 49
+			miniMapEventMarker.draw(gl);
+			gl.glPopMatrix();
+			gl.glLoadIdentity();
+		}
 	}
 
 	private void drawEndGame(GL10 gl) {
@@ -852,5 +936,13 @@ public class PKGameRenderer implements Renderer
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void checkMiniGame() {
+		if (playerPosition == globalEventPosition && currentEvent == 3)
+		{
+			enterMiniGame = true;
+		}
+		
 	}
 }

@@ -70,8 +70,8 @@ public class PKGameClient {
 	final int port = 9001;
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "localhost";
-	final String gameServerAddress = "10.0.2.2";
-	//final String gameServerAddress = "172.28.177.45";
+	//final String gameServerAddress = "10.0.2.2";
+	final String gameServerAddress = "172.28.176.129";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 

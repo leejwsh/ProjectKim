@@ -9,7 +9,7 @@ import android.media.MediaPlayer;
 public class PKEngine
 {
 	// Constants for connection to server.
-	public static final int PLAYER_ID = 0;
+	public static final int PLAYER_ID = 3;
 	
 	// Constants for threads.
 	public static final int GAME_THREAD_DELAY = 1000;
@@ -79,6 +79,7 @@ public class PKEngine
 	public static final int MASCOT = R.drawable.mascot;
 	public static final int MASCOT_WIDTH = 800;
 	public static final int MASCOT_HEIGHT = 360;
+	public static final int MASCOT_EVENT_ANNOUNCEMENT = R.drawable.mascot_event_annonuce;
 	public static final int MASCOT_OPEN_CHEST_SUCCESS = R.drawable.mascot_open_success;
 	public static final int MASCOT_NO_CHEST = R.drawable.mascot_nochest;
 	public static final int MASCOT_NO_KEY = R.drawable.mascot_nokey;
@@ -88,6 +89,7 @@ public class PKEngine
 	public static final int MASCOT_LEARN_STUD_LOUNGE = R.drawable.mascot_know_lounge;
 	public static final int MASCOT_LEARN_HCI = R.drawable.mascot_know_hci;
 	public static final int MASCOT_LEARN_SMALL_SR = R.drawable.mascot_know_smallsr;
+	public static final int MASCOT_ENTER_FALLING_COIN = R.drawable.mascot_falling_coin;
 	
 	public static final int LOADING_MSG = R.drawable.wait_player;
 	public static final int LOADING_MSG_WIDTH = 800;
@@ -107,6 +109,7 @@ public class PKEngine
 	public static final float MINI_MAP_Y_OFFSET = 0.01f; // Translate mini map up by OFFSET.
 	public static final float MINI_MAP_GRID_SIZE = MINI_MAP_SCALE / (POV_MAP_WIDTH + 2);
 	public static final int MINI_MAP_MARKER = R.drawable.minimap_cross;
+	public static final int MINI_MAP_EVENT = R.drawable.minimap_event;
 	public static final int MINI_MAP_MARKER_WIDTH = 100;
 	public static final int MINI_MAP_MARKER_HEIGHT = 100;
 	
