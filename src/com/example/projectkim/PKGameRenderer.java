@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.widget.TableLayout;
 
 public class PKGameRenderer implements Renderer
 {
@@ -62,8 +63,11 @@ public class PKGameRenderer implements Renderer
 	private PKImage resultWin = new PKImage();
 	private PKImage resultLose = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.RESULT_HEIGHT / PKEngine.RESULT_WIDTH, 1.0f, 1.0f);
 	private PKImage loadingMsg = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.LOADING_MSG_HEIGHT / PKEngine.LOADING_MSG_WIDTH, 1.0f, 1.0f);
+	private PKImage choosePlayerMsg = new PKImage(1.0f, 1.0f * PKEngine.scrWidth / PKEngine.scrHeight * PKEngine.LOADING_MSG_HEIGHT / PKEngine.LOADING_MSG_WIDTH, 1.0f, 1.0f);
+	
 	private int msgIndicator = 0;
-	private int currentEvent = -1;
+	private int currentEvent = 0;
+	private boolean logOn = false;
 	private boolean globalMapIndicator = false;
 	private boolean enterMiniGame = false;
 	private boolean announceEvent = false;
@@ -124,6 +128,10 @@ public class PKGameRenderer implements Renderer
 				break;
 			case 2:
 				// starts gameTimer
+				if (!logOn)
+				{
+					PKEngine.playerID = 0; // TODO: Assign player an ID if player did not choose a valid ID before countdown ends.
+				}
 				if (!startGameTimer)
 				{
 					startLoginTimer = false;
@@ -165,6 +173,7 @@ public class PKGameRenderer implements Renderer
 				PKEngine.gameEnd = true;
 				break;
 		}
+		
 		if (!showEndGameMsg)
 		{
 			if (System.currentTimeMillis() - startTime >= 500)
@@ -172,7 +181,7 @@ public class PKGameRenderer implements Renderer
 				// Update positions on server.
 				try
 				{
-					PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+					PKEngine.client.mapUpdateEvent(PKEngine.playerID);
 					//PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, 500);
 				}
 				catch (Exception e)
@@ -184,11 +193,11 @@ public class PKGameRenderer implements Renderer
 		}
 		
 		// Update player location.
-		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
+		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.playerID);
 		
 		// Update player stats.
-		playerScore = PKEngine.client.getPlayerScore(PKEngine.PLAYER_ID);
-		numKeys = PKEngine.client.getPlayerKeyNum(PKEngine.PLAYER_ID);
+		playerScore = PKEngine.client.getPlayerScore(PKEngine.playerID);
+		numKeys = PKEngine.client.getPlayerKeyNum(PKEngine.playerID);
 		
 		// Clear OpenGL buffers.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -213,6 +222,18 @@ public class PKGameRenderer implements Renderer
 		printLocationName(gl);
 		if (startLoginTimer)
 		{
+			if (PKEngine.playerID > 0 && !logOn)
+			{
+				try
+				{
+					if (PKEngine.client.loginEvent(PKEngine.playerID).equalsIgnoreCase("Successful"))
+						logOn = true;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
 			drawLoginMsg(gl);
 			printLoginInfo(gl);
 		}
@@ -329,6 +350,7 @@ public class PKGameRenderer implements Renderer
 		resultWin.loadTexture(gl, PKEngine.RESULT_WIN, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		resultLose.loadTexture(gl, PKEngine.RESULT_LOSE, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		loadingMsg.loadTexture(gl, PKEngine.LOADING_MSG, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
+		choosePlayerMsg.loadTexture(gl, PKEngine.CHOOSE_PLAYER_MSG, PKEngine.context, GL10.GL_CLAMP_TO_EDGE);
 		
 		// Loads mascot images.
 		// [0] - mascot //Default
@@ -352,14 +374,15 @@ public class PKGameRenderer implements Renderer
 		PKEngine.mascotImages.add(msgKnowStudLounge);
 		PKEngine.mascotImages.add(msgKnowSmallSR);
 		
-		// testing
 		startTime = System.currentTimeMillis();
 		
 		// Initialise position and player on server.
+		PKEngine.playerID = 0;
+		logOn = false;
 		try
 		{
-			PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
-			PKEngine.client.loginEvent(PKEngine.PLAYER_ID);
+			PKEngine.client.mapUpdateEvent(PKEngine.playerID);
+			PKEngine.client.loginEvent(PKEngine.playerID);
 		}
 		catch (Exception e)
 		{
@@ -367,7 +390,7 @@ public class PKGameRenderer implements Renderer
 		}
 		
 		// Initialisation for player position.
-		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.PLAYER_ID);
+		playerPosition = PKEngine.client.getPlayerLocation(PKEngine.playerID);
 		playerNewPos.add(playerPosition);
 		povMapCoords[0] = playerPosition % PKEngine.POV_MAP_WIDTH * 1.0f / (PKEngine.POV_MAP_WIDTH + 2);
 		povMapCoords[1] = playerPosition / PKEngine.POV_MAP_WIDTH * -1.0f / (PKEngine.POV_MAP_HEIGHT + 2);
@@ -377,6 +400,8 @@ public class PKGameRenderer implements Renderer
 		
 		// Initialisation of player score.
 		playerScore = 0;
+		
+		PKEngine.totalPlayers = PKEngine.client.getTotalNumOfPlayersSupported();
 	}
 	
 	private void updateTreasureLocation()
@@ -454,11 +479,20 @@ public class PKGameRenderer implements Renderer
 	
 	private void printEndGameInfo(GL10 gl) {
 		font.SetScale(3.0f);
-		font.PrintAt(gl, "YOUR RANK: " + String.valueOf(PKEngine.client.getRankingOfGivenPlayer(PKEngine.PLAYER_ID)), (PKEngine.scrWidth - font.GetTextLength("YOUR RANK: ")) / 2, 0.4f * PKEngine.scrHeight);
+		font.PrintAt(gl, "YOUR RANK: " + String.valueOf(PKEngine.client.getRankingOfGivenPlayer(PKEngine.playerID)), (PKEngine.scrWidth - font.GetTextLength("YOUR RANK: ")) / 2, 0.4f * PKEngine.scrHeight);
 	}
 	
 	private void drawLoginMsg(GL10 gl)
 	{
+		/*for (int i = 0; i < totalPlayers; i++)
+		{
+			if (PKEngine.client.checkPlayerLogonStatus(PKEngine.playerID))
+			{
+				//PKGame.players[i].setAlpha(0.5f);
+				//PKGame.players[i].setEnabled(false);
+			}
+		}*/
+		
 		// Draw Loading Msg Overlay
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -467,7 +501,10 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
-		loadingMsg.draw(gl);
+		if (PKEngine.playerID == 0)
+			choosePlayerMsg.draw(gl);
+		else
+			loadingMsg.draw(gl);
 		gl.glPopMatrix();
 		gl.glLoadIdentity();
 	}
@@ -860,7 +897,7 @@ public class PKGameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glLoadIdentity();
 		
-		if (PKEngine.client.getRankingOfGivenPlayer(PKEngine.PLAYER_ID) == 1){
+		if (PKEngine.client.getRankingOfGivenPlayer(PKEngine.playerID) == 1){
 			resultWin.draw(gl);
 		} else
 			resultLose.draw(gl);
@@ -882,7 +919,7 @@ public class PKGameRenderer implements Renderer
 		{
 			try
 			{
-				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.PLAYER_ID);
+				checkChestReply = PKEngine.client.openTreasureEvent(PKEngine.playerID);
 				if (checkChestReply.equalsIgnoreCase("Successful"))
 				{
 					startAddScoreTime = System.currentTimeMillis();
@@ -908,7 +945,6 @@ public class PKGameRenderer implements Renderer
 		AddKeyCodeThread addKeyCodeThread = new AddKeyCodeThread(keyCode);
 		addKeyCodeThread.start();
 		while (addKeyCodeThread.isAlive()){}
-
 		return checkKeyReply;
 	}
 
@@ -925,7 +961,7 @@ public class PKGameRenderer implements Renderer
 		{
 			try
 			{
-				checkKeyReply = PKEngine.client.addKeyCodeEvent(PKEngine.PLAYER_ID, keyCode);
+				checkKeyReply = PKEngine.client.addKeyCodeEvent(PKEngine.playerID, keyCode);
 				if (checkKeyReply.equalsIgnoreCase("Successful"))
 					msgIndicator = 4;
 				else
@@ -938,11 +974,44 @@ public class PKGameRenderer implements Renderer
 		}
 	}
 
-	public void checkMiniGame() {
+	public void setPlayerLogOn()
+	{
+		PlayerLogOnThread playerLogOnThread = new PlayerLogOnThread();
+		playerLogOnThread.start();
+		while (playerLogOnThread.isAlive()){}
+	}
+	
+	private class PlayerLogOnThread extends Thread
+	{
+		public void run()
+		{
+			try
+			{
+				PKEngine.client.loginEvent(PKEngine.playerID);
+				logOn = true;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}	
+		}
+	}
+	
+	public void checkMiniGame()
+	{
 		if (playerPosition == globalEventPosition && currentEvent == 3)
 		{
 			enterMiniGame = true;
 		}
-		
+	}
+	
+	public int getCurrentEvent()
+	{
+		return currentEvent;
+	}
+
+	public boolean getPlayerLogOn()
+	{
+		return logOn;
 	}
 }

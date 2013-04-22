@@ -53,7 +53,7 @@ public class FallingCoinsActivity extends GLGame
 			{
 				try
 				{
-					PKEngine.client.mapUpdateEvent(PKEngine.PLAYER_ID);
+					PKEngine.client.mapUpdateEvent(PKEngine.playerID);
 					timer = PKEngine.client.getCurrentMiniGameTime();
 				} catch (Exception e)
 				{

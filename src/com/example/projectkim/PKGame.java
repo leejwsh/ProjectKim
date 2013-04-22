@@ -3,10 +3,12 @@ package com.example.projectkim;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,10 +26,13 @@ public class PKGame extends Activity
 {
 	private PKGameView gameView;
 	private PKGameRenderer renderer;
-	private TableLayout keypad, keypadInput;
-	private ImageButton num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
+	private TableLayout playerSelectionInput, keypad, keypadInput;
+	private Button addKey;
+	private ImageButton p1, p2, p3, p4, num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
+	private ImageButton[] players = new ImageButton[4];
 	private ImageButton[] keyInput = new ImageButton[4];
 	private int[] numbers = new int[10];
+	private int[] playersSelected = new int[4];
 	private String keyCode = "";
 	private int currentKeyPos;
 	
@@ -43,6 +48,7 @@ public class PKGame extends Activity
 		setContentView(R.layout.game);
 		gameView = (PKGameView)findViewById(R.id.PKGameView);
 		gameView.setRenderer(renderer);
+		new Login().execute();
 		
 		Button openChest = (Button)findViewById(R.id.btnOpenChest);
 		openChest.setVisibility(View.VISIBLE);
@@ -52,7 +58,7 @@ public class PKGame extends Activity
 		startMiniGame.setVisibility(View.VISIBLE);
 		startMiniGame.setBackgroundColor(Color.TRANSPARENT);
 		
-		Button addKey = (Button)findViewById(R.id.btnKey);
+		addKey = (Button)findViewById(R.id.btnKey);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 		params.leftMargin = 0;
 		params.rightMargin = (int) (PKEngine.scrWidth * 0.82f);
@@ -61,6 +67,21 @@ public class PKGame extends Activity
 		addKey.setLayoutParams(params);
 		addKey.setVisibility(View.VISIBLE);
 		addKey.setBackgroundColor(Color.TRANSPARENT);
+		
+		playerSelectionInput = (TableLayout)findViewById(R.id.playerSelect);
+		p1 = (ImageButton)findViewById(R.id.player1);
+		p2 = (ImageButton)findViewById(R.id.player2);
+		p3 = (ImageButton)findViewById(R.id.player3);
+		p4 = (ImageButton)findViewById(R.id.player4);
+		players[0] = p1;
+		players[1] = p2;
+		players[2] = p3;
+		players[3] = p4;
+		
+		playersSelected[0] = R.drawable.player1;
+		playersSelected[1] = R.drawable.player2;
+		playersSelected[2] = R.drawable.player3;
+		playersSelected[3] = R.drawable.player4;
 		
 		keypad = (TableLayout)findViewById(R.id.keypad);
 		keypadInput = (TableLayout)findViewById(R.id.keypadInput);
@@ -98,7 +119,11 @@ public class PKGame extends Activity
 		switch (v.getId())
 		{
 			case R.id.btnOpenChest:
-				String chestReply = renderer.openChest();
+				if (renderer.getCurrentEvent() != 1)
+				{
+					//String chestReply = renderer.openChest(); // testing purpose
+					renderer.openChest();
+				}
 				// For testing purposes.
 				/*if (chestReply.equalsIgnoreCase("Successful"))
 				{
@@ -114,18 +139,41 @@ public class PKGame extends Activity
 					msg.show();
 				}*/
 				break;
+			case R.id.player1:
+				PKEngine.playerID = 1;
+				//renderer.setPlayerLogOn();
+				playerSelectionInput.setVisibility(View.INVISIBLE);
+				break;
+			case R.id.player2:
+				PKEngine.playerID = 2;
+				//renderer.setPlayerLogOn();
+				playerSelectionInput.setVisibility(View.INVISIBLE);
+				break;
+			case R.id.player3:
+				PKEngine.playerID = 3;
+				//renderer.setPlayerLogOn();
+				playerSelectionInput.setVisibility(View.INVISIBLE);
+				break;
+			case R.id.player4:
+				PKEngine.playerID = 4;
+				//renderer.setPlayerLogOn();
+				playerSelectionInput.setVisibility(View.INVISIBLE);
+				break;
 			case R.id.btnKey:
-				if (keypad.getVisibility() == View.INVISIBLE)
+				if (renderer.getCurrentEvent() != 1)
 				{
-					keypad.setVisibility(View.VISIBLE);
-					keypadInput.setVisibility(View.VISIBLE);
-				}
-				else 
-				{
-					keypad.setVisibility(View.INVISIBLE);
-					keypadInput.setVisibility(View.INVISIBLE);
-					resetKeyCode();
-					currentKeyPos = 0;
+					if (keypad.getVisibility() == View.INVISIBLE)
+					{
+						keypad.setVisibility(View.VISIBLE);
+						keypadInput.setVisibility(View.VISIBLE);
+					}
+					else
+					{
+						keypad.setVisibility(View.INVISIBLE);
+						keypadInput.setVisibility(View.INVISIBLE);
+						resetKeyCode();
+						currentKeyPos = 0;
+					}
 				}
 				break;
 			case R.id.enterMiniGame:
@@ -264,6 +312,51 @@ public class PKGame extends Activity
 		}
 	}
 	
+	private class Login extends AsyncTask<String, Void, String>
+	{
+		@Override
+		protected String doInBackground(String... arg0)
+		{
+			while (renderer.getCurrentEvent() <= 1 && !renderer.getPlayerLogOn())
+			{
+				if (renderer.getCurrentEvent() == 1)
+					setTableVisibility(View.VISIBLE);	
+				for (int i = 0; i < PKEngine.totalPlayers; i++)
+				{
+					if (PKEngine.client.checkPlayerLogonStatus(i+1))
+					{
+						setSelectionFade(i, 0.5f);
+					}
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			setTableVisibility(View.INVISIBLE);
+			super.onPostExecute(result);
+		}
+	}
+	
+	private void setTableVisibility(final int visible) {
+		playerSelectionInput.getHandler().post(new Runnable() {
+		    public void run() {
+		        playerSelectionInput.setVisibility(visible);
+		    }
+		});
+	}
+	
+	public void setSelectionFade(final int player, final float alpha) {
+		players[player].getHandler().post(new Runnable() {
+		    public void run() {
+		        //players[player].setAlpha(alpha);
+		    	players[player].setBackgroundResource(playersSelected[player]);
+		        players[player].setEnabled(false);
+		    }
+		});
+	}
+
 	@Override
 	protected void onPause()
 	{

@@ -9,7 +9,7 @@ import android.media.MediaPlayer;
 public class PKEngine
 {
 	// Constants for connection to server.
-	public static final int PLAYER_ID = 3;
+	//public static final int PLAYER_ID = 3;
 	
 	// Constants for threads.
 	public static final int GAME_THREAD_DELAY = 1000;
@@ -92,6 +92,7 @@ public class PKEngine
 	public static final int MASCOT_ENTER_FALLING_COIN = R.drawable.mascot_falling_coin;
 	
 	public static final int LOADING_MSG = R.drawable.wait_player;
+	public static final int CHOOSE_PLAYER_MSG = R.drawable.choose_player;
 	public static final int LOADING_MSG_WIDTH = 800;
 	public static final int LOADING_MSG_HEIGHT = 1280;
 	
@@ -116,6 +117,8 @@ public class PKEngine
 	// Variables for connection to server.
 	public static PKGameClient client;
 	public static boolean isConnected = false;
+	public static int playerID = 0; // Dummy Player
+	public static int totalPlayers = 0;
 	
 	// Variables for screen size.
 	public static int scrHeight;

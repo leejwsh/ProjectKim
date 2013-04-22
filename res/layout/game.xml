@@ -33,6 +33,51 @@
         
     </GridLayout>
     -->
+    <TableLayout 
+	    android:id="@+id/playerSelect"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:visibility="invisible">
+	    <TableRow>
+	        <ImageButton 
+	            android:id="@+id/player1"
+	            android:background="@drawable/num1"
+	            android:layout_width="30dip"
+				android:layout_height="30dip"
+	            android:padding="0dip"
+	            android:layout_marginRight="5dip"
+	            android:onClick="buttonOnClick">
+			</ImageButton>
+			<ImageButton 
+	            android:id="@+id/player2"
+	            android:background="@drawable/num2"
+	            android:layout_width="30dip"
+				android:layout_height="30dip"
+				android:layout_marginRight="5dip"
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
+			</ImageButton>
+			<ImageButton 
+	            android:id="@+id/player3"
+	            android:background="@drawable/num3"
+	            android:layout_width="30dip"
+				android:layout_height="30dip"
+				android:layout_marginRight="5dip"
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
+			</ImageButton>
+			<ImageButton 
+	            android:id="@+id/player4"
+	            android:background="@drawable/num4"
+	            android:layout_width="30dip"
+				android:layout_height="30dip"
+	            android:padding="0dip"
+	            android:onClick="buttonOnClick">
+			</ImageButton>
+	    </TableRow>
+    </TableLayout>
+    
     <TableLayout
         android:id="@+id/keypadInput"
 		android:layout_width="wrap_content"

@@ -211,12 +211,12 @@ public class FCGameScreen extends GLScreen
             TouchEvent event = touchEvents.get(i);
             if (event.type != TouchEvent.TOUCH_UP)
                 continue;
-            int currentScore = PKEngine.client.getPlayerScore(PKEngine.PLAYER_ID);
+            int currentScore = PKEngine.client.getPlayerScore(PKEngine.playerID);
             currentScore += lastScore;
             // Updates the current score to the server.
             try
             {
-				PKEngine.client.scoreUpdateEvent(PKEngine.PLAYER_ID, currentScore);
+				PKEngine.client.scoreUpdateEvent(PKEngine.playerID, currentScore);
 			} catch (Exception e)
 			{
 				e.printStackTrace();

@@ -71,7 +71,7 @@ public class PKGameClient {
 	final int timeOutDuration = 500;
 	//final String gameServerAddress = "localhost";
 	//final String gameServerAddress = "10.0.2.2";
-	final String gameServerAddress = "172.28.176.129";
+	final String gameServerAddress = "172.28.177.175";
 	private DatagramSocket socket;
 	InetAddress inetAddress;
 
@@ -467,12 +467,22 @@ public class PKGameClient {
 			counter += playerList[i][0];
 		}
 
-		return counter;
+		return counter - 1;
 	}
 
 	/* Closes the UDP socket */
 	public void closeSocket() {
 		socket.close();
+	}
+
+	public boolean checkPlayerLogonStatus(int playerID){
+		if(playerList[playerID][0] == 1)
+			return true;
+		else return false;
+	}
+	
+	public int getTotalNumOfPlayersSupported(){
+		return P_NUM - 1;
 	}
 
 }
