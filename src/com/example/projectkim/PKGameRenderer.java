@@ -377,16 +377,19 @@ public class PKGameRenderer implements Renderer
 		startTime = System.currentTimeMillis();
 		
 		// Initialise position and player on server.
-		PKEngine.playerID = 0;
-		logOn = false;
-		try
+		if (currentEvent == 0)
 		{
-			PKEngine.client.mapUpdateEvent(PKEngine.playerID);
-			PKEngine.client.loginEvent(PKEngine.playerID);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+			PKEngine.playerID = 0;
+			logOn = false;
+			try
+			{
+				PKEngine.client.mapUpdateEvent(PKEngine.playerID);
+				PKEngine.client.loginEvent(PKEngine.playerID);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		// Initialisation for player position.

@@ -42,6 +42,11 @@ public class PKGame extends Activity
 		super.onCreate(savedInstanceState);
 		PKEngine.gameEnd = false;
 		
+		// Test for UDP broadcast
+		/*WifiManager wm = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+		WifiManager.MulticastLock multicastLock = wm.createMulticastLock("mydebuginfo");
+		multicastLock.acquire();*/
+		
 		new Connection().execute();
 		renderer = new PKGameRenderer(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
