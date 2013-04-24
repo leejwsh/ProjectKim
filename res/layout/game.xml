@@ -10,6 +10,14 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"/>
 
+    <ImageView
+        android:id="@+id/loadScreen"
+        android:src="@drawable/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY">
+    </ImageView>
+    
     <Button
         android:id="@+id/btnOpenChest"
         android:layout_width="wrap_content"
@@ -46,7 +54,7 @@
 	            android:layout_width="30dip"
 				android:layout_height="30dip"
 	            android:padding="0dip"
-	            android:layout_marginRight="5dip"
+	            android:layout_marginRight="10dip"
 	            android:onClick="buttonOnClick">
 			</ImageButton>
 			<ImageButton 
@@ -54,7 +62,7 @@
 	            android:background="@drawable/num2"
 	            android:layout_width="30dip"
 				android:layout_height="30dip"
-				android:layout_marginRight="5dip"
+				android:layout_marginRight="10dip"
 	            android:padding="0dip"
 	            android:onClick="buttonOnClick">
 			</ImageButton>
@@ -63,7 +71,7 @@
 	            android:background="@drawable/num3"
 	            android:layout_width="30dip"
 				android:layout_height="30dip"
-				android:layout_marginRight="5dip"
+				android:layout_marginRight="10dip"
 	            android:padding="0dip"
 	            android:onClick="buttonOnClick">
 			</ImageButton>

@@ -29,6 +29,7 @@ public class PKGame extends Activity
 	private TableLayout playerSelectionInput, keypad, keypadInput;
 	private Button addKey;
 	private ImageButton p1, p2, p3, p4, num0, num1, num2, num3, num4, num5, num6, num7, num8, num9;
+	private ImageView loadingScreen;
 	private ImageButton[] players = new ImageButton[4];
 	private ImageButton[] keyInput = new ImageButton[4];
 	private int[] numbers = new int[10];
@@ -54,6 +55,8 @@ public class PKGame extends Activity
 		gameView = (PKGameView)findViewById(R.id.PKGameView);
 		gameView.setRenderer(renderer);
 		new Login().execute();
+		
+		loadingScreen = (ImageView)findViewById(R.id.loadScreen);
 		
 		Button openChest = (Button)findViewById(R.id.btnOpenChest);
 		openChest.setVisibility(View.VISIBLE);
@@ -322,15 +325,19 @@ public class PKGame extends Activity
 		@Override
 		protected String doInBackground(String... arg0)
 		{
-			while (renderer.getCurrentEvent() <= 1 && !renderer.getPlayerLogOn())
+			while (renderer.getCurrentEvent() <= 1 && !renderer.getPlayerLogOn() && !PKEngine.gameEnd)
 			{
 				if (renderer.getCurrentEvent() == 1)
-					setTableVisibility(View.VISIBLE);	
-				for (int i = 0; i < PKEngine.totalPlayers; i++)
 				{
-					if (PKEngine.client.checkPlayerLogonStatus(i+1))
+					setLoadScreenVisibility(View.INVISIBLE);
+					setTableVisibility(View.VISIBLE);
+					
+					for (int i = 0; i < PKEngine.totalPlayers; i++)
 					{
-						setSelectionFade(i, 0.5f);
+						if (PKEngine.client.checkPlayerLogonStatus(i+1))
+						{
+							setSelectionFade(i, 0.5f);
+						}
 					}
 				}
 			}
@@ -338,23 +345,41 @@ public class PKGame extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 			setTableVisibility(View.INVISIBLE);
 			super.onPostExecute(result);
 		}
 	}
 	
-	private void setTableVisibility(final int visible) {
-		playerSelectionInput.getHandler().post(new Runnable() {
-		    public void run() {
+	private void setTableVisibility(final int visible)
+	{
+		playerSelectionInput.getHandler().post(new Runnable()
+		{
+		    public void run()
+		    {
 		        playerSelectionInput.setVisibility(visible);
 		    }
 		});
 	}
 	
-	public void setSelectionFade(final int player, final float alpha) {
-		players[player].getHandler().post(new Runnable() {
-		    public void run() {
+	public void setLoadScreenVisibility(final int visible)
+	{
+		loadingScreen.getHandler().post(new Runnable()
+		{
+		    public void run()
+		    {
+		        loadingScreen.setVisibility(visible);
+		    }
+		});
+	}
+
+	public void setSelectionFade(final int player, final float alpha)
+	{
+		players[player].getHandler().post(new Runnable()
+		{
+		    public void run()
+		    {
 		        //players[player].setAlpha(alpha);
 		    	players[player].setBackgroundResource(playersSelected[player]);
 		        players[player].setEnabled(false);
@@ -463,6 +488,7 @@ public class PKGame extends Activity
 		{
 			public void onClick(DialogInterface arg0, int arg1)
 			{
+				PKEngine.gameEnd = true;
 				PKGame.super.onBackPressed();
 			}
 		}).create().show();
